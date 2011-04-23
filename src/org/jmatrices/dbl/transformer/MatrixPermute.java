@@ -1,7 +1,6 @@
 package org.jmatrices.dbl.transformer;
 
 import org.jmatrices.dbl.Matrix;
-import org.jmatrices.dbl.Matrix;
 
 /**
  * MatrixPermute
@@ -17,12 +16,12 @@ import org.jmatrices.dbl.Matrix;
  * Date: 12.03.2004
  * Time: 12:43:51
  */
-public class MatrixPermute {
-    public static Matrix swapRow(int row1, int row2) {
+public final class MatrixPermute {
+    public static Matrix swapRow(final Matrix m, int row1, int row2) {
         return null;
     }
 
-    public static Matrix swapColumn(int col1, int col2) {
+    public static Matrix swapColumn(final Matrix m, int col1, int col2) {
         return null;
     }
 

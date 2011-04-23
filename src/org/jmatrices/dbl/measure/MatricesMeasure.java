@@ -22,7 +22,7 @@ public final class MatricesMeasure {
      * @param b Matrix
      * @return true iff element in a at a given position equals the element in b at the same position
      */
-    public static boolean areEqual(Matrix a, Matrix b) {
+    public static boolean areEqual(final Matrix a, final Matrix b) {
         if (areSameDimension(a, b)) {
             for (int row = 1; row <= a.rows(); row++) {
                 for (int col = 1; col <= a.cols(); col++) {
@@ -43,7 +43,7 @@ public final class MatricesMeasure {
      * @param b Matrix
      * @return true if rows and columns, i.e. the dimensions of a and b are are equal
      */
-    public static boolean areSameDimension(Matrix a, Matrix b) {
+    public static boolean areSameDimension(final Matrix a, final Matrix b) {
         return (a.rows() == b.rows() && a.cols() == b.cols());
     }
 
@@ -57,7 +57,7 @@ public final class MatricesMeasure {
      * @param b an mxn Matrix
      * @return
      */
-    public static double dotProduct(Matrix a, Matrix b) {
+    public static double dotProduct(final Matrix a, final Matrix b) {
         if (areSameDimension(a, b))
             return MatrixMeasure.getSum(MatrixOperator.multiplyEBE(a, b));
         else

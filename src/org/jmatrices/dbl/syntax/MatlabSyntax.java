@@ -2,6 +2,8 @@ package org.jmatrices.dbl.syntax;
 
 import org.jmatrices.dbl.Matrix;
 import org.jmatrices.dbl.MatrixFactory;
+import org.jmatrices.dbl.build.MatrixBuilder;
+import org.jmatrices.dbl.build.MatrixBuilder;
 import org.jmatrices.dbl.decomposition.*;
 import org.jmatrices.dbl.measure.MatricesMeasure;
 import org.jmatrices.dbl.measure.MatrixMeasure;
@@ -17,6 +19,7 @@ import java.util.Iterator;
 
 /**
  * MatlabSyntax
+ * todo there exist many refernces to classes in arraybaseddecomp chnage them!
  * <p>Author: purangp</p>
  * Date: 30.04.2004
  * Time: 14:49:39
@@ -30,7 +33,7 @@ public final class MatlabSyntax {
     }
 
     public static Matrix rand(int rows, int cols) {
-        return MatrixFactory.getRandomMatrix(rows, cols, null);
+        return MatrixBuilder.getRandomMatrix(rows, cols, null);
     }
 
     public static Matrix magic(int dim) {
@@ -50,7 +53,7 @@ public final class MatlabSyntax {
     }
 
     public static Matrix ones(int rows, int cols) {
-        return MatrixFactory.getMatrix(rows, cols, null, 1);
+        return MatrixFactory.getSingleValueMatrix(rows,cols,1);
     }
 
     public static Matrix ones(int dim) {
@@ -59,12 +62,12 @@ public final class MatlabSyntax {
 
     public static Matrix eye(int rows, int cols) {
         if (rows == cols)
-            return MatrixFactory.getIdentityMatrix(rows, null);
+            return MatrixFactory.getIdentityMatrix(rows);
         boolean rowsAreBigger = (rows > cols);     //vertical concatenation
         if (rowsAreBigger)
-            return MatrixOperator.verticalConcatenation(MatrixFactory.getIdentityMatrix(cols, null), MatrixFactory.getMatrix(rows - cols, cols, null));
+            return MatrixOperator.verticalConcatenation(MatrixFactory.getIdentityMatrix(cols), MatrixFactory.getMatrix(rows - cols, cols, null));
         else
-            return MatrixOperator.horizontalConcatenation(MatrixFactory.getIdentityMatrix(rows, null), MatrixFactory.getMatrix(rows, cols - rows, null));
+            return MatrixOperator.horizontalConcatenation(MatrixFactory.getIdentityMatrix(rows), MatrixFactory.getMatrix(rows, cols - rows, null));
     }
 
     /**
@@ -203,8 +206,8 @@ public final class MatlabSyntax {
             if (tmpMatrix != null) {
                 rows_tmp = tmpMatrix.rows();
                 cols_tmp = tmpMatrix.cols();
-                Matrix rightMatrix = MatrixFactory.getMatrix(rows_tmp, cols_m, tmpMatrix, 0);
-                Matrix leftMatrix = MatrixFactory.getMatrix(rows_m, cols_tmp, tmpMatrix, 0);
+                Matrix rightMatrix = MatrixFactory.getSingleValueMatrix(rows_tmp, cols_m, 0);
+                Matrix leftMatrix = MatrixFactory.getSingleValueMatrix(rows_m, cols_tmp, 0);
                 Matrix upperMatrix = horzcat(tmpMatrix, rightMatrix);
                 Matrix lowerMatrix = horzcat(leftMatrix, matrix);
                 tmpMatrix = vertcat(upperMatrix, lowerMatrix);
@@ -328,7 +331,7 @@ public final class MatlabSyntax {
      */
     public static Matrix[] lu(Matrix m) {
         Matrix[] result = new Matrix[3];
-        LUDecomposition lu = new LUDecomposition(m);
+        LU lu = new LU(m);
         result[0] = lu.getL();
         result[1] = lu.getU();
         result[2] = lu.getPivotMatrix();
@@ -337,7 +340,7 @@ public final class MatlabSyntax {
 
     public static Matrix[] qr(Matrix m) {
         Matrix[] result = new Matrix[3];
-        QRDecomposition qr = new QRDecomposition(m);
+        QR qr = new QR(m);
         result[0] = qr.getQ();
         result[1] = qr.getR();
         result[2] = qr.getH();
@@ -346,7 +349,7 @@ public final class MatlabSyntax {
 
     public static Matrix[] eig(Matrix m) {
         Matrix[] result = new Matrix[2];
-        EigenvalueDecomposition eig = new EigenvalueDecomposition(m);
+        Eigenvalue eig = new Eigenvalue(m);
         result[0] = eig.getV();
         result[1] = eig.getD();
         return result;
@@ -354,7 +357,7 @@ public final class MatlabSyntax {
 
     public static Matrix[] chol(Matrix m) {
         Matrix[] result = new Matrix[2];
-        CholeskyDecomposition chol = new CholeskyDecomposition(m);
+        Cholesky chol = new Cholesky(m);
         result[0] = chol.getL();
         Matrix p = MatrixFactory.getMatrix(1, 1, null);
         if (chol.isSPD())
@@ -367,9 +370,9 @@ public final class MatlabSyntax {
 
     public static Matrix[] svd(Matrix m) {
         Matrix[] result = new Matrix[3];
-        SingularValueDecomposition svd = new SingularValueDecomposition(m);
+        SV svd = new SV(m);
         result[0] = svd.getU();
-        result[1] = svd.getS();
+        result[1] = svd.getSingularValues();
         result[2] = svd.getV();
         return result;
     }

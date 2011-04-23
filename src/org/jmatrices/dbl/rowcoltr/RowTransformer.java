@@ -26,7 +26,7 @@ public final class RowTransformer {
      * @param m Matrix
      * @return c(mx1) column vector with row sums
      */
-    public static Matrix sum(Matrix m) {
+    public static Matrix sum(final Matrix m) {
         return MatrixTransformer.transpose(ColumnTransformer.sum(MatrixTransformer.transpose(m)));
     }
 
@@ -36,7 +36,7 @@ public final class RowTransformer {
      * @param m Matrix
      * @return c(mx1) column vector with row products
      */
-    public static Matrix product(Matrix m) {
+    public static Matrix product(final Matrix m) {
         return MatrixTransformer.transpose(ColumnTransformer.product(MatrixTransformer.transpose(m)));
     }
 
@@ -49,7 +49,7 @@ public final class RowTransformer {
      * @param adjustment true or false
      * @return c(mx1) column vector with row means
      */
-    public static Matrix mean(Matrix m, boolean adjustment) {
+    public static Matrix mean(final Matrix m, boolean adjustment) {
         return MatrixTransformer.transpose(ColumnTransformer.mean(MatrixTransformer.transpose(m), adjustment));
     }
 
@@ -59,7 +59,7 @@ public final class RowTransformer {
      * @param m Matrix
      * @return c(mx1) column vector with row's maximum values
      */
-    public static Matrix max(Matrix m) {
+    public static Matrix max(final Matrix m) {
         return MatrixTransformer.transpose(ColumnTransformer.max(MatrixTransformer.transpose(m)));
     }
 
@@ -69,7 +69,7 @@ public final class RowTransformer {
      * @param m Matrix
      * @return c(mx1) column vector with rows's minimum values
      */
-    public static Matrix min(Matrix m) {
+    public static Matrix min(final Matrix m) {
         return MatrixTransformer.transpose(ColumnTransformer.min(MatrixTransformer.transpose(m)));
     }
 

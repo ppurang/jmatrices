@@ -1,8 +1,9 @@
 package org.jmatrices.dbl.measure;
 
 import org.jmatrices.dbl.Matrix;
-import org.jmatrices.dbl.decomposition.LUDecomposition;
-import org.jmatrices.dbl.decomposition.SingularValueDecomposition;
+import org.jmatrices.dbl.decomposition.LU;
+import org.jmatrices.dbl.decomposition.SV;
+
 import org.jmatrices.dbl.rowcoltr.ColumnTransformer;
 import org.jmatrices.dbl.rowcoltr.RowTransformer;
 import org.jmatrices.dbl.transformer.MatrixEBETransformation;
@@ -33,8 +34,8 @@ public final class MatrixMeasure {
      * @param m Matrix
      * @return detrminant
      */
-    public static double getDeterminant(Matrix m) {
-        return (new LUDecomposition(m)).det();
+    public static double getDeterminant(final Matrix m) {
+        return (new LU(m)).det();
     }
 
     /**
@@ -43,7 +44,7 @@ public final class MatrixMeasure {
      * @param m Matrix
      * @return trace
      */
-    public static double getTrace(Matrix m) {
+    public static double getTrace(final Matrix m) {
         return ColumnTransformer.sum(MatrixTransformer.diagonal(m)).getValue(1, 1);
     }
 
@@ -53,8 +54,8 @@ public final class MatrixMeasure {
      * @param m Matrix
      * @return rank
      */
-    public static int getRank(Matrix m) {
-        return (new SingularValueDecomposition(m)).rank();
+    public static int getRank(final Matrix m) {
+        return (new SV(m)).rank();
     }
 
     //todo do we really need getValue suffix? as we haven't used it any where else .. that doesn't seem very consistent!!!
@@ -65,7 +66,7 @@ public final class MatrixMeasure {
      * @param m Matrix
      * @return maximum value
      */
-    public static double getMax(Matrix m) {
+    public static double getMax(final Matrix m) {
         return (RowTransformer.max(ColumnTransformer.max(m))).getValue(1, 1);
     }
 
@@ -75,7 +76,7 @@ public final class MatrixMeasure {
      * @param m Matrix
      * @return minimum value
      */
-    public static double getMin(Matrix m) {
+    public static double getMin(final Matrix m) {
         return (RowTransformer.min(ColumnTransformer.min(m))).getValue(1, 1);
     }
 
@@ -85,7 +86,7 @@ public final class MatrixMeasure {
      * @param m Matrix
      * @return sum of all values
      */
-    public static double getSum(Matrix m) {
+    public static double getSum(final Matrix m) {
         return (RowTransformer.sum(ColumnTransformer.sum(m))).getValue(1, 1);
     }
 
@@ -95,7 +96,7 @@ public final class MatrixMeasure {
      * @param m Matrix
      * @return product of all values
      */
-    public static double getProduct(Matrix m) {
+    public static double getProduct(final Matrix m) {
         return (RowTransformer.product(ColumnTransformer.product(m))).getValue(1, 1);
     }
 
@@ -108,7 +109,7 @@ public final class MatrixMeasure {
      * @param adjustment true or false
      * @return adjusted or unadjusted mean of all values
      */
-    public static double getMean(Matrix m, boolean adjustment) {
+    public static double getMean(final Matrix m, boolean adjustment) {
         double prod = m.rows() * m.cols();
         if (adjustment)
             return ((prod / (prod - 1)) * getMean(m, false));
@@ -123,7 +124,7 @@ public final class MatrixMeasure {
      * @param m Matrix
      * @return maximum column sum
      */
-    public static double getNorm1(Matrix m) {
+    public static double getNorm1(final Matrix m) {
         return RowTransformer.max(ColumnTransformer.sum(MatrixEBETransformer.ebeTransform(m, new MatrixEBETransformation() {
             public double transform(double element) {
                 return Math.abs(element);
@@ -137,8 +138,8 @@ public final class MatrixMeasure {
      * @param m Matrix
      * @return maximum singular value
      */
-    public static double getNorm2(Matrix m) {
-        return new SingularValueDecomposition(m).norm2();
+    public static double getNorm2(final Matrix m) {
+        return new SV(m).norm2();
     }
 
 
@@ -148,7 +149,7 @@ public final class MatrixMeasure {
      * @param m Matrix
      * @return maximum row sum
      */
-    public static double getNormInfinity(Matrix m) {
+    public static double getNormInfinity(final Matrix m) {
         return ColumnTransformer.max(RowTransformer.sum(MatrixEBETransformer.ebeTransform(m, new MatrixEBETransformation() {
             public double transform(double element) {
                 return Math.abs(element);
@@ -162,7 +163,7 @@ public final class MatrixMeasure {
      * @param m Matrix
      * @return sqrt of sum of squares of all elements.
      */
-    public static double getNormFrobenius(Matrix m) {
+    public static double getNormFrobenius(final Matrix m) {
         return Math.sqrt(MatrixMeasure.getSum(MatrixEBETransformer.ebeTransform(m, new MatrixEBETransformation() {
             public double transform(double element) {
                 return element * element;
@@ -177,8 +178,8 @@ public final class MatrixMeasure {
      * @param m Matrix
      * @return ratio of largest to smallest singular value.
      */
-    public static double getCondition(Matrix m) {
-        return new SingularValueDecomposition(m).cond();
+    public static double getCondition(final Matrix m) {
+        return new SV(m).cond();
     }
 
 
@@ -188,7 +189,7 @@ public final class MatrixMeasure {
      * @param m
      * @return Math.max(m.rows(),m.cols())
      */
-    public static int length(Matrix m) {
+    public static int length(final Matrix m) {
         return Math.max(m.rows(), m.cols());
     }
 
@@ -198,7 +199,7 @@ public final class MatrixMeasure {
      * @param m
      * @return Math.min(m.rows(),m.cols())
      */
-    public static int breadth(Matrix m) {
+    public static int breadth(final Matrix m) {
         return Math.min(m.rows(), m.cols());
     }
 

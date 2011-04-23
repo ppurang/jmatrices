@@ -1,3 +1,21 @@
+/**
+ * Jmatrices - Matrix Library
+ * Copyright (C) 2004  Piyush Purang
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library, see License.txt; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 package org.jmatrices.dbl;
 
 import java.text.DecimalFormat;
@@ -7,14 +25,19 @@ import java.util.Locale;
 /**
  * AbstractMatrix implements all the methods in Matrix except getValue and setValue which are left to be implemented
  * by concrete classes
- * <br>Author: purangp</br>
- * <br>
- * Date: 07.06.2004
- * Time: 14:47:43
- * </br>
+ *
+ * @author purangp
+ *         created 07.06.2004 - 14:47:43
  */
 public abstract class AbstractMatrix implements Matrix {
-    protected int rows, cols;
+    /**
+     * number of rows in the matrix
+     */
+    protected int rows;
+    /**
+     * number of columns in the matrix
+     */
+    protected int cols;
 
     /**
      * Constructor to allow correct creation of Matrix objects
@@ -61,14 +84,14 @@ public abstract class AbstractMatrix implements Matrix {
     }
 
     public final double getValue(int row, int col) {
-        withinBounds(row,col);
-        return getValue0(row,col);
+        withinBounds(row, col);
+        return getValue0(row, col);
     }
 
     protected abstract double getValue0(int row, int col);
 
     public final void setValue(int row, int col, double value) {
-        withinBounds(row,col);
+        withinBounds(row, col);
         setValue0(row, col, value);
     }
 
@@ -85,7 +108,6 @@ public abstract class AbstractMatrix implements Matrix {
             throw new IndexOutOfBoundsException("row and col parameters must satisfy 0 < row/col <= rows()/cols()");
     }
 
-    //todo    hashCode  clone ?
     /**
      * Returns a string representation of the matrix object.
      * <br/>
@@ -112,19 +134,13 @@ public abstract class AbstractMatrix implements Matrix {
         format.setMaximumFractionDigits(25);
         format.setMinimumFractionDigits(2);
         format.setGroupingUsed(false);
-        StringBuffer matrix = new StringBuffer();
-        for (int row = 1; row <= rows; row++) {
-            for (int col = 1; col <= cols; col++) {
-                matrix.append(format.format(this.getValue(row, col)) + " ");
-            }
-            matrix.append("\n");
-        }
-        return matrix.toString();
+        return MatrixFormatter.formatMatrix(this, format);
     }
 
     /**
      * remark template pattern method
      * Sad that a cast will have to be done to convert into a Matrix object
+     *
      * @return deep copy of the matrix
      */
     public Object clone() {         //question move clone into Matrix or drop it?
@@ -134,6 +150,7 @@ public abstract class AbstractMatrix implements Matrix {
 
     /**
      * remark make sure this exists and doesn't depend on any other class to do this operation.
+     * remark Does defensive copying
      *
      * @return matrix that shares implementation class with this matrix
      */
@@ -150,7 +167,7 @@ public abstract class AbstractMatrix implements Matrix {
     protected Matrix populateClone(Matrix m) {
         for (int row = 1; row <= rows(); row++) {
             for (int col = 1; col <= cols(); col++) {
-                m.setValue(row,col,getValue(row,col));
+                m.setValue(row, col, getValue(row, col));
             }
         }
         return m;
@@ -160,13 +177,13 @@ public abstract class AbstractMatrix implements Matrix {
      * Tests for equality with the object passed as the argument.
      *
      * @param obj Object to be compared to.
-     * @return <code>true</code> iff obj is a matrix with same dimensions and
+     * @return <code>true</code> iff obj is instance of Matrix and all corresponding elements are equal.
      */
     public boolean equals(Object obj) {
         boolean toReturn = false;
         if (obj instanceof Matrix) {
             Matrix that = (Matrix) obj;
-            notequal: {
+            notequal: {    //remark usage of a label.
                 if (this.rows() == that.rows() && this.cols() == that.cols()) {
                     for (int row = 1; row <= rows(); row++) {
                         for (int col = 1; col <= cols(); col++) {
@@ -181,11 +198,16 @@ public abstract class AbstractMatrix implements Matrix {
         return toReturn;
     }
 
+    /**
+     * todo think about caching hashCodes.
+     *
+     * @return int representing the hashCode.
+     */
     public int hashCode() {
         int hashCode = Integer.parseInt("" + rows + cols); //this will be unique for 3,2 and 2,3 and 6,1 and 1,6
         for (int row = 1; row <= rows(); row++) {
             for (int col = 1; col <= cols(); col++) {
-                hashCode += Integer.parseInt("" + row + col) + (int) this.getValue(row,col) ;
+                hashCode += Integer.parseInt("" + row + col) + (int) this.getValue(row, col);
             }
         }
         return hashCode;

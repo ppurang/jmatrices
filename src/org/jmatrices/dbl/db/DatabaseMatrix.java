@@ -2,6 +2,9 @@ package org.jmatrices.dbl.db;
 
 import org.jmatrices.dbl.AbstractMatrix;
 import org.jmatrices.dbl.Matrix;
+import org.jmatrices.dbl.MatrixFactory;
+import org.jmatrices.dbl.MutableMatrixProducer;
+
 import java.sql.SQLException;
 
 /**
@@ -12,9 +15,15 @@ import java.sql.SQLException;
  * Time: 23:18:43
  * </br>
  */
-public class DatabaseMatrix extends AbstractMatrix {
+public class DatabaseMatrix extends AbstractMatrix implements MutableMatrixProducer {
     protected MatrixDatabaseConnection connection;
     protected String uuidString;
+
+    private static final DatabaseMatrix producer = new DatabaseMatrix();
+    static {
+        MatrixFactory.getInstance().registerMatrixProducer(producer.getClass().getName(), producer);
+    }
+
 
     public DatabaseMatrix() {
     }
@@ -126,5 +135,10 @@ public class DatabaseMatrix extends AbstractMatrix {
 
     protected Matrix createClone() {
         return new DatabaseMatrix(rows(),cols());
+    }
+
+
+    public Matrix getMatrix(int rows, int cols) {
+        return new DatabaseMatrix(rows,cols);
     }
 }

@@ -1,5 +1,7 @@
 package org.jmatrices.dbl.decomposition;
 
+import org.jmatrices.dbl.Matrix;
+
 /**
  * Util
  * <br/>
@@ -9,6 +11,7 @@ package org.jmatrices.dbl.decomposition;
  * Time: 13:54:46
  */
 public final class Util {
+    
     public static double hypot(double a, double b) {
         double r;
         if (Math.abs(a) > Math.abs(b)) {
@@ -32,7 +35,7 @@ public final class Util {
      * @param a
      * @return
      */
-     public static int sign(int a) {
+    public static int sign(int a) {
         if (a > 0)
             return 1;
         else if (a < 0)
@@ -40,6 +43,7 @@ public final class Util {
 
         return 0;
     }
+
     /**
      * Signum function
      * returns 1 if the <code>a</code>
@@ -52,10 +56,30 @@ public final class Util {
     public static int sign(double a) {
         if (a > 0)
             return 1;
-        else if (a<0)
+        else if (a < 0)
             return -1;
 
         return 0;
+    }
+
+    static boolean isSymmetric(Matrix a) {
+        boolean symmetric = true;
+        if (a.rows() != a.cols()) {
+            symmetric = false;
+        } else {
+            twoloops:
+            for (int row = 0; row <= a.rows(); row++) {
+                for (int col = 0; col <= a.cols(); col++) {
+                    if (a.getValue(row, col) == a.getValue(col, row)) {
+                        continue;
+                    } else {
+                        symmetric = false;
+                        break twoloops;
+                    }
+                }
+            }
+        }
+        return symmetric;
     }
 
     private Util() {

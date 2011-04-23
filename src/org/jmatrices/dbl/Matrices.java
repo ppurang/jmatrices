@@ -1,4 +1,25 @@
+/**
+ * Jmatrices - Matrix Library
+ * Copyright (C) 2004  Piyush Purang
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library, see License.txt; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 package org.jmatrices.dbl;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Matrices plays the same role that Collections does for collection classes
@@ -72,7 +93,7 @@ public final class Matrices {
     /**
      * Get a submatrix.
      *
-     * @param n    Matrix who's submatrix is needed
+     * @param n Matrix who's submatrix is needed
      * @param r Array of row indices.
      * @param c Array of column indices.
      * @return A(r(:),c(:))
@@ -191,5 +212,31 @@ public final class Matrices {
      * private constructor to prohibit object creation
      */
     private Matrices() {
+    }
+
+    public static Matrix getMatrixFromArray(int n, int n1, Matrix hint, double[][] elems) {
+        Matrix toReturn = MatrixFactory.getMatrix(n, n1, hint);
+        for (int i = 0; i < elems.length; i++) {
+            for (int j = 0; j < elems[i].length; j++) {
+                double elem = elems[j][j];
+                toReturn.setValue(i + 1, j + 1, elem);
+            }
+        }
+        return toReturn;
+    }
+
+    public static Matrix getColumnMatrixFromList(Matrix hint, List list) {
+        if (list.size() <= 0)
+            throw new IllegalArgumentException("Array list size should atleast be 1");
+        // return MatrixFactory.getEmptyMatrix();
+        Matrix cv = MatrixFactory.getMatrix(list.size(), 1, hint);
+        Iterator iter = list.iterator();
+        int row = 1;
+        while (iter.hasNext()) {
+            Double o = (Double) iter.next();
+            cv.setValue(row, 1, o.doubleValue());
+            row++;
+        }
+        return cv;
     }
 }

@@ -31,7 +31,7 @@ public final class ColumnTransformer {
      * @return
      * @see ColumnTransformation
      */
-    public static Matrix applyColumnOperation(Matrix m, ColumnTransformation co) {
+    public static Matrix applyColumnOperation(final Matrix m, ColumnTransformation co) {
         throw new UnsupportedOperationException("to be implemented");
 
     }
@@ -42,7 +42,7 @@ public final class ColumnTransformer {
      * @param m Matrix
      * @return r(1xn) row vector with column sums
      */
-    public static Matrix sum(Matrix m) {
+    public static Matrix sum(final Matrix m) {
         int rows_c = m.rows(), cols_c = m.cols();
         Matrix d;
         if (rows_c == 1) {
@@ -66,7 +66,7 @@ public final class ColumnTransformer {
      * @param m Matrix
      * @return r(1xn) row vector with column product
      */
-    public static Matrix product(Matrix m) {
+    public static Matrix product(final Matrix m) {
         int rows_c = m.rows(), cols_c = m.cols();
         Matrix d;
         if (rows_c == 1) {
@@ -93,7 +93,7 @@ public final class ColumnTransformer {
      * @param adjustment true or false
      * @return r(1xn) row vector with column means
      */
-    public static Matrix mean(Matrix m, boolean adjustment) {
+    public static Matrix mean(final Matrix m, boolean adjustment) {
         int rows_c = m.rows(), cols_c = m.cols(), den = rows_c;
         Matrix d;
         if (adjustment)
@@ -119,7 +119,7 @@ public final class ColumnTransformer {
      * @param m Matrix
      * @return r(1xn) row vector with column's maximum values
      */
-    public static Matrix max(Matrix m) {
+    public static Matrix max(final Matrix m) {
         int rows_c = m.rows(), cols_c = m.cols();
         Matrix d;
         if (rows_c == 1) {
@@ -150,7 +150,7 @@ public final class ColumnTransformer {
      * @param m Matrix
      * @return r(1xn) row vector with column's minimum values
      */
-    public static Matrix min(Matrix m) {
+    public static Matrix min(final Matrix m) {
         int rows_c = m.rows(), cols_c = m.cols(), den = rows_c;
         Matrix d;
         if (rows_c == 1) {

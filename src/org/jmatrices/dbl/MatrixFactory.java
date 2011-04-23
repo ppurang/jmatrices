@@ -1,30 +1,43 @@
+/**
+ * Jmatrices - Matrix Library
+ * Copyright (C) 2004  Piyush Purang
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library, see License.txt; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 package org.jmatrices.dbl;
 
-import java.util.Iterator;
-import java.util.List;
-import org.jmatrices.dbl.transformer.MatrixConditionalEBETransformation;
-import org.jmatrices.dbl.transformer.MatrixEBETransformation;
-import org.jmatrices.dbl.transformer.MatrixEBETransformer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Collections;
 
 /**
- * MatrixFactory is one-stop shop for creating matrices.
- * <ol>
- * <li>Rectangular(Square, Vector) matrices, initialized to 0.0, scalar or array of values</li>
- * <li>Scalar Matrices including Identity matrix</li>
- * </ol>
- * <p/>
- * <font color="blue">
- * <br/>todo consider deserialization of matrices from ascii, mathml, xml files.
- * <br/>todo serialization? through matrix interface ?
- * </font>
- * </p><p>
- * Author: purangp
- * </p>
- * Date: 07.03.2004
- * Time: 15:56:59
+ * MatrixFactory
+ * remark: MatrixFactory has been split up into two classes
+ * remark: MatrixFactory is now a singelton and allows better mechanism for producing matrices.
+ *
+ * @author purangp
+ *         Created 13.12.2004 - 22:26:12
  */
 public class MatrixFactory {
+    public static final String MATRIX_SELECTION_STRATEGY_DEFAULT_CLASS_NAME = "org.jmatrices.dbl.PropertiesFileMatrixSelectionStrategy";
+    public static final String MATRIX_SELECTION_STRATEGY_SYSTEM_PROP = "matrix.selection.strategy.default.class";
+    private static final MatrixFactory factory = new MatrixFactory();
+    private MatrixSelectionStrategy default_strategy;
+    private Map mutableMatrixProducers = new HashMap();
 
+    //various matrix implementations
     public static Matrix getArrayMatrix(int rows, int cols) {
         return new ArrayMatrixImpl(rows, cols);
     }
@@ -37,23 +50,18 @@ public class MatrixFactory {
         return new SparseMatrixImpl(rows, cols);
     }
 
-    public static Matrix getScalarMatrix(int dim, double scalar) {
-        return new ScalarMatrixImpl(dim, scalar);
+    public static Matrix getSparseMatrixUniqueValue(int rows, int cols) {
+        return new SparseMatrixUniqueValueImpl(rows, cols);
     }
 
+
+    //Diagonal Matrix methods
     public static Matrix getDiagonalMatrix(int dim) {
         return new DiagonalMatrixImpl(dim);
     }
+
     public static Matrix getDiagonalMatrix(int rows, int cols) {
         return new DiagonalMatrixImpl(rows, cols);
-    }
-
-    public static Matrix getMatrixClone(Matrix m) {
-        Matrix toReturn = MatrixFactory.getMatrix(m.rows(),m.cols(),m);
-        for (int row=1; row<=m.rows(); row++)
-           for (int col=1;col<=m.cols(); col++)
-               toReturn.setValue(row,col,m.getValue(row,col));
-        return toReturn;
     }
 
     public static Matrix getDiagonalMatrix(int dim, double[] diagonal) {
@@ -63,33 +71,37 @@ public class MatrixFactory {
         return m;
     }
 
-
-    public static Matrix discoverMuttableMatrixHint(Matrix a, Matrix b) {
-        Matrix c, d;
-        if (precedenceRatio(a, b) > 1) {
-            c = a;
-            d = b;
-        } else {
-            c = b;
-            d = a;
-        }
-        if (c instanceof ArrayMatrixImpl || c instanceof SparseMatrixImpl) {
-            return c;
-        } else if (d instanceof ArrayMatrixImpl || d instanceof SparseMatrixImpl) {
-            return d;
-        } else {
-            return null;
-        }
+    //Spl Diagonal
+    public static Matrix getScalarMatrix(int dim, double scalar) {
+        return new ScalarMatrixImpl(dim, scalar);
     }
 
-    private static float precedenceRatio(Matrix a, Matrix b) {
-        return (a.rows() * a.cols()) / (b.rows() * b.cols());
+    public static Matrix getIdentityMatrix(int dim) {
+        return getScalarMatrix(dim, 1);
     }
 
+    //matrix clone
+    private static Matrix getMatrixCloneNotSupported(Matrix m) {
+        Matrix toReturn = MatrixFactory.getMatrix(m.rows(), m.cols(), m);
+        for (int row = 1; row <= m.rows(); row++)
+            for (int col = 1; col <= m.cols(); col++)
+                toReturn.setValue(row, col, m.getValue(row, col));
+        return toReturn;
+    }
 
+    public static Matrix getMatrixClone(Matrix m) {
+        Matrix clone = null;
+        try {
+            clone = (Matrix) m.clone();
+        } catch (CloneNotSupportedException e) {
+            clone = getMatrixCloneNotSupported(m);
+        }
+        return clone;
+    }
+
+    //underlying implementation propogation methods
     /**
-     * Gets a muttable matrix of the asked dimensions.
-     * <br> a muttable matrix's set method doesn't throw UnsupportedOperationException</br>
+     * Gets a matrix of the asked dimensions.
      * All elements are setValue to 0.0
      *
      * @param rows number of rows in the matrix (>= 1)
@@ -98,181 +110,102 @@ public class MatrixFactory {
      * @return Matrix of the given dimensions
      */
     public static Matrix getMatrix(int rows, int cols, Matrix hint) {
-        if (hint instanceof SparseMatrixImpl)
-            return MatrixFactory.getSparseMatrix(rows, cols);
-        if (hint instanceof DiagonalMatrixImpl)
-            return MatrixFactory.getDiagonalMatrix(rows, cols);
-        return MatrixFactory.getArrayMatrix(rows, cols);
+        return getMatrix(rows, cols, hint, getInstance().default_strategy);
+    }
+
+    public static Matrix getMatrix(int rows, int cols, Matrix hint, MatrixSelectionStrategy strategy) {
+        return strategy.selectMutableMatrix(rows, cols, hint);
+    }
+
+    public static Matrix getMatrix(int rows, int cols, Matrix a, Matrix b) {
+        return getMatrix(rows, cols, a, b, getInstance().default_strategy);
     }
 
     /**
-     * Gets a matrix of the asked dimensions, filled with random values
-     * <p/>
+     * Gets a matrix of the asked dimensions.
+     * All elements are setValue to 0.0
      *
      * @param rows number of rows in the matrix (>= 1)
      * @param cols number of columns in the matrix (>= 1)
-     * @param hint acts as a hint for the right implementation to use
      * @return Matrix of the given dimensions
      */
-    public static Matrix getRandomMatrix(int rows, int cols, Matrix hint) {
-        return MatrixEBETransformer.ebeTransform(getMatrix(rows, cols, hint), new MatrixEBETransformation() {
-            public double transform(double element) {
-                return Math.random();
-            }
-        });
+    public static Matrix getMatrix(int rows, int cols, Matrix a, Matrix b, MatrixSelectionStrategy strategy) {
+        return strategy.selectMutableMatrix(rows, cols, a, b);
     }
 
     /**
-     * Gets a matrix of the asked dimensions.
+     * Singelton instance getter
      * <p/>
-     * All elements are setValue to scalar.
+     * todo have a getInstance(selection strategy) ?
      *
-     * @param rows   number of rows in the matrix (>= 1)
-     * @param cols   number of columns in the matrix (>= 1)
-     * @param hint   acts as a hint for the right implementation to use
-     * @param scalar initial value of the elements
-     * @return Matrix of the given dimensions and value
+     * @return the one-and-only instance.
      */
-    public static Matrix getMatrix(int rows, int cols, Matrix hint, double scalar) {
-        return scalarAddition(getMatrix(rows, cols, hint), scalar);
+    public static MatrixFactory getInstance() {
+        return factory;
     }
 
     /**
-     * Gets a matrix of the asked dimensions.
-     * <p/>
-     * All elements are setValue to values in the passed array.
-     *
-     * @param rows   number of rows in the matrix (>= 1)
-     * @param cols   number of columns in the matrix (>= 1)
-     * @param hint   acts as a hint for the right implementation to use
-     * @param values initial value of the elements
-     * @return Matrix of the given dimensions and values
+     * Private constructor as it is a singelton and utility class
      */
-    public static Matrix getMatrix(int rows, int cols, Matrix hint, double values[][]) {
-        Matrix m = getMatrix(rows, cols, hint);
-        return populateElements(m, values);
-    }
-
-    /**
-     * Gets an Identity matrix
-     *
-     * @param dim  dimension of the square matrix
-     * @param hint acts as a hint for the right implementation to use
-     * @return Square matrix with the diagonal elements setValue to 1.
-     */
-    public static Matrix getIdentityMatrix(int dim, Matrix hint) {
-        return getScalarMatrix(dim, hint, 1);
-    }
-
-    /**
-     * Gets a scalar matrix.
-     *
-     * @param dim    dimension of the square matrix
-     * @param hint   acts as a hint for the right implementation to use
-     * @param scalar the value the main diagonal elements have to be setValue to
-     * @return Square matrix with the diagonal elements setValue to scalar value.
-     */
-    public static Matrix getScalarMatrix(int dim, Matrix hint, final double scalar) {
-        Matrix m = MatrixFactory.getMatrix(dim, dim, hint);
-        return MatrixEBETransformer.ebeTransform(m, new MatrixConditionalEBETransformation() {
-            public double transform(int row, int col, double element) {
-                if (row == col)
-                    return scalar;
-                return
-                        element;
-            }
-        });
-    }
-
-    /**
-     * Gets a column vector with list values composing the vector's values.
-     * <br/>
-     * <b>Note:</b> will throw an <code>IllegalArgumentException</code> if <code>list.size()<=0</code>
-     *
-     * @param list list containing the <code>Double</code> values that will be used to compose the vector
-     * @param hint acts as a hint for the right implementation to use
-     * @return column vector
-     */
-    public static Matrix getMatrix(List list, Matrix hint) {
-        if (list.size() <= 0)
-            throw new IllegalArgumentException("Array list size should atleast be 1");
-        // return MatrixFactory.getEmptyMatrix();
-        Matrix cv = getMatrix(list.size(), 1, hint);
-        Iterator iter = list.iterator();
-        int row = 1;
-        while (iter.hasNext()) {
-            Double o = (Double) iter.next();
-            cv.setValue(row, 1, o.doubleValue());
-            row++;
-        }
-        return cv;
-    }
-
-    /**
-     * PRIVATE MEMBERS
-     */
-
-
     private MatrixFactory() {
+        //todo initialize default strategy
+        String className = System.getProperty(MATRIX_SELECTION_STRATEGY_SYSTEM_PROP);
+        if (className != null) {
+            initializeDefaultStrategy(className);
+        } else {
+            initializeDefaultStrategy(MATRIX_SELECTION_STRATEGY_DEFAULT_CLASS_NAME);
+        }
+    }
+
+    private void initializeDefaultStrategy(String className) {
+        try {
+            Class clazz = Class.forName(className);
+            default_strategy = (MatrixSelectionStrategy) clazz.newInstance();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Wrapped a ClassNotFoundException in RuntimeException", e);
+        } catch (InstantiationException e) {
+            throw new RuntimeException("Wrapped a InstantiationException in RuntimeException", e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Wrapped a IllegalAccessException in RuntimeException", e);
+        }
     }
 
     /**
-     * remark - perhaps should be moved to transformer package and made public!
+     * registers a matrix prosducer for a given Matrix type.
+     * <br />
+     * It does run a check to make sure that the producer is indeed able to produce the matrixType.
      *
-     * @param m
-     * @param s
-     * @return
+     * @param matrixClassName full name of the class of matrices produced by the producer
+     * @param producer        that claims to be able to produce matrices of type matrixType
      */
-    private static Matrix scalarAddition(Matrix m, final double s) {
-        return MatrixEBETransformer.ebeTransform(m, new MatrixEBETransformation() {
-            public double transform(double element) {
-                return element + s; //could be +, *, -, /
-            }
-        });
-    }
-
-    private static Matrix populateElements(Matrix m, double[][] elems) {
-        //question - performance hit but better management of code - any better solution?!
-        if (checkConformity(elems, m.rows(), m.cols())) {
-            for (int i = 0; i < elems.length; i++) {
-                for (int j = 0; j < elems[i].length; j++) {
-                    m.setValue(i + 1, j + 1, elems[i][j]);
-                }
-            }
-            return m;
-        } else
-            throw new IllegalArgumentException("Array to initialise doesn't conform with matrix dimensions");
-    }
-
-    private static boolean checkConformity(double[][] elems, int rows, int cols) {
-        if (elems.length != rows) {
-            return false;
-        } else {
-            for (int row = 0; row < elems.length; row++) {
-                if (elems[row].length != cols) return false;
-            }
+    public void registerMatrixProducer(String matrixClassName, final MutableMatrixProducer producer) {
+        if (producer.getMatrix(1, 1).getClass().getName().equals(matrixClassName)) {
+            mutableMatrixProducers.put(matrixClassName, producer);
         }
-        return true;
     }
 
+    /**
+     * Gets the MatrixProducer for the passed matrixType.
+     *
+     * @param matrixClassName type of matrices created by the sought after producer
+     * @return producer or null.
+     */
+    public MutableMatrixProducer getProducer(String matrixClassName) {
+        MutableMatrixProducer producer = (MutableMatrixProducer) mutableMatrixProducers.get(matrixClassName);
+        if ( producer == null) {
+            //give it a chance toregister
+            try {
+                Class.forName(matrixClassName,true,Thread.currentThread().getContextClassLoader());
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException("Wrapped a ClassNotFoundException", e);
+            }
+            //try again
+            producer = (MutableMatrixProducer) mutableMatrixProducers.get(matrixClassName);
+        }
+        return producer;
+    }
+
+    public Map getMutableProducers() {
+        return Collections.unmodifiableMap(mutableMatrixProducers);
+    }
 }
-
-
-/**
- *  Jmatrices - Matrix Library
- Copyright (C) 2004  Piyush Purang
-
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Lesser General Public
- License as published by the Free Software Foundation; either
- version 2.1 of the License, or (at your option) any later version.
-
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- Lesser General Public License for more details.
-
- You should have received a copy of the GNU Lesser General Public
- License along with this library, see License.txt; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */

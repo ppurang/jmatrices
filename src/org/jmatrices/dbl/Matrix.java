@@ -1,4 +1,25 @@
+/**
+ * Jmatrices - Matrix Library
+ * Copyright (C) 2004  Piyush Purang
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library, see License.txt; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 package org.jmatrices.dbl;
+
+import java.io.Serializable;
+
 /**
  * Matrix represents a <strong>structurally immutable</strong> matrix of numbers(double) with <strong>index begining at 1</strong>.
  *
@@ -21,7 +42,7 @@ package org.jmatrices.dbl;
  *
  * created 07.03.2004 - 15:52:02
  */
-public interface Matrix extends java.io.Serializable, Cloneable {
+public interface Matrix extends Serializable, Cloneable {
     /**
      * Gets the number of rows in the matrix
      * <p/>
@@ -44,12 +65,11 @@ public interface Matrix extends java.io.Serializable, Cloneable {
      */
     int cols();
 
-    // GETS AND SETS
     /**
      * Sets an element at the given position to a new value
      * <br>May throw an {@link UnsupportedOperationException} in case the object is immutable. See {@link ScalarMatrixImpl}</br>
      * <br>May throw an {@link IllegalArgumentException} in case the object is in parts muttable. See {@link DiagonalMatrixImpl} </br>
-     * <br>Will throw IndexOutOfBoundsException if index bounds are violated</br>
+     * <br>Will throw {@link IndexOutOfBoundsException} if index bounds are violated</br>
      * <pre>
      * Valid bounds are:
      *  1 &lt;= row &lt;= this.rows()
@@ -64,7 +84,7 @@ public interface Matrix extends java.io.Serializable, Cloneable {
 
     /**
      * Gets the value of the element at the given row and column
-     * <br>Will throw IndexOutOfBoundsException if index bounds are violated</br>
+     * <br>Will throw {@link IndexOutOfBoundsException} if index bounds are violated</br>
      *
      * <pre>
      * Valid bounds are:
@@ -78,25 +98,28 @@ public interface Matrix extends java.io.Serializable, Cloneable {
      */
     double getValue(int row, int col);
 
-
+    /**
+     * (Remark) Forces <code>Matrix</code> objects to override equals as defined in <code>Object</code>.
+     *
+     * @param obj Object to be compared against
+     * @return <code>true</code> iff obj is instance of Matrix and all corresponding elements are equal.
+     */
     boolean equals(Object obj);
+
+    /**
+     * (Remark) As we force overriding of equals so should we force overriding of hashCode.
+     */
+    int hashCode();
+
+    /**
+     * (Remark) <code>Cloneable</code> by itself doesn't quarantee that an appropriate clone exists hence need for forcing its implementation.
+     * May throw a CloneNotSupportedException.
+     */
+    Object clone() throws CloneNotSupportedException;
+
+    /**
+     * Remark Forces <code>Matrix</code> objects to override toString as defined in <code>Object</code>.
+     */
+    String toString();
+
 }
-
-/**
- *  Jmatrices - Matrix Library
-    Copyright (C) 2004  Piyush Purang
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library, see License.txt; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */

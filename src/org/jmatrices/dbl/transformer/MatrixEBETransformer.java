@@ -22,7 +22,7 @@ public final class MatrixEBETransformer {
      * @param mebet MatrixEBETransformation object responsible for the transformation
      * @return transformed matrix
      */
-    public static Matrix ebeTransform(Matrix m, MatrixEBETransformation mebet) {
+    public static Matrix ebeTransform(final Matrix m, MatrixEBETransformation mebet) {
         int rows = m.rows(), cols = m.cols();
         Matrix transformed = MatrixFactory.getMatrix(rows, cols, m);
         for (int row = 1; row <= rows; row++) {
@@ -40,7 +40,7 @@ public final class MatrixEBETransformer {
      * @param mcebet MatrixConditionalEBETransformation object responsible for the transformation
      * @return transformed matrix
      */
-    public static Matrix ebeTransform(Matrix m, MatrixConditionalEBETransformation mcebet) {
+    public static Matrix ebeTransform(final Matrix m, MatrixConditionalEBETransformation mcebet) {
         int rows = m.rows(), cols = m.cols();
         Matrix transformed = MatrixFactory.getMatrix(rows, cols, m);
         for (int row = 1; row <= rows; row++) {

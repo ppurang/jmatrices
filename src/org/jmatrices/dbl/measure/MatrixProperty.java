@@ -2,8 +2,8 @@ package org.jmatrices.dbl.measure;
 
 import org.jmatrices.dbl.Matrix;
 import org.jmatrices.dbl.MatrixFactory;
-import org.jmatrices.dbl.decomposition.CholeskyDecomposition;
-import org.jmatrices.dbl.decomposition.LUDecomposition;
+import org.jmatrices.dbl.decomposition.LU;
+import org.jmatrices.dbl.decomposition.Cholesky;
 import org.jmatrices.dbl.transformer.MatrixTransformer;
 
 /**
@@ -28,7 +28,7 @@ public final class MatrixProperty {
      * @param m
      * @return true iff m has only one column
      */
-    public static boolean isColumnVector(Matrix m) {
+    public static boolean isColumnVector(final Matrix m) {
         return m.cols() == 1;
     }
 
@@ -38,7 +38,7 @@ public final class MatrixProperty {
      * @param m
      * @return true iff m has only one row
      */
-    public static boolean isRowVector(Matrix m) {
+    public static boolean isRowVector(final Matrix m) {
         return m.rows() == 1;
     }
 
@@ -48,7 +48,7 @@ public final class MatrixProperty {
      * @param m
      * @return true iff m has only one row
      */
-    public static boolean isVector(Matrix m) {
+    public static boolean isVector(final Matrix m) {
         return (m.cols() ==1 || m.rows() == 1);
     }
 
@@ -58,7 +58,7 @@ public final class MatrixProperty {
      * @param m
      * @return true iff m has as many columns as it has rows
      */
-    public static boolean isSquare(Matrix m) {
+    public static boolean isSquare(final Matrix m) {
         return m.rows() == m.cols();
     }
 
@@ -68,7 +68,7 @@ public final class MatrixProperty {
      * @param m
      * @return true iff A' = A
      */
-    public static boolean isSymmetric(Matrix m) {
+    public static boolean isSymmetric(final Matrix m) {
         return MatricesMeasure.areEqual(m, MatrixTransformer.transpose(m));
     }
 
@@ -78,7 +78,7 @@ public final class MatrixProperty {
      * @param m
      * @return true if A' = -A
      */
-    public static boolean isSkewSymmetric(Matrix m) {
+    public static boolean isSkewSymmetric(final Matrix m) {
         return MatricesMeasure.areEqual(MatrixTransformer.transpose(m), MatrixTransformer.negate(m));
     }
 
@@ -88,7 +88,7 @@ public final class MatrixProperty {
      * @param m
      * @return true if A = AA = AAA = AAAA...  or A = A<sup>2</sup> = A<sup>3</sup>= A<sup>4</sup> ..
      */
-    public static boolean isIdempotent(Matrix m) {
+    public static boolean isIdempotent(final Matrix m) {
         return MatricesMeasure.areEqual(m, MatrixTransformer.pow(m, 2));
     }
 
@@ -99,7 +99,7 @@ public final class MatrixProperty {
      * @param m
      * @return
      */
-    public static boolean isMagicSquare(Matrix m) {
+    public static boolean isMagicSquare(final Matrix m) {
         throw new UnsupportedOperationException("to be implemented");
     }
 
@@ -110,8 +110,8 @@ public final class MatrixProperty {
      * @param m Matrix
      * @return true iff A<sup>-1</sup> exists
      */
-    public static boolean isSingular(Matrix m) {
-        return new LUDecomposition(m).isSingular();
+    public static boolean isSingular(final Matrix m) {
+        return new LU(m).isSingular();
     }
 
     /**
@@ -121,7 +121,7 @@ public final class MatrixProperty {
      * @return true iff a<sub>i</sub><sub>j</sub>=0 , for all i <> j
      * @see MatrixProperty#isScalar(org.jmatrices.dbl.Matrix)
      */
-    public static boolean isDiagonal(Matrix m) {
+    public static boolean isDiagonal(final Matrix m) {
         if (isSquare(m)) {
             for (int row = 1; row <= m.rows(); row++) {
                 for (int col = 1; col <= m.cols(); col++) {
@@ -140,8 +140,8 @@ public final class MatrixProperty {
      * @param m Matrix
      * @return true iff a<sub>i</sub><sub>j</sub>=0 , for all i <> j  and a<sub>i</sub><sub>j</sub>=1 , for all i = j
      */
-    public static boolean isIdentity(Matrix m) {
-        return isSquare(m) && MatricesMeasure.areEqual(m, MatrixFactory.getIdentityMatrix(m.rows(), null));
+    public static boolean isIdentity(final Matrix m) {
+        return isSquare(m) && MatricesMeasure.areEqual(m, MatrixFactory.getIdentityMatrix(m.rows()));
     }
 
     /**
@@ -150,7 +150,7 @@ public final class MatrixProperty {
      * @param m Matrix
      * @return true iff a<sub>i</sub><sub>j</sub>=0 , for all i <> j  and a<sub>i</sub><sub>j</sub>=1 , for all i = j
      */
-    public static boolean isUnit(Matrix m) {
+    public static boolean isUnit(final Matrix m) {
         return isIdentity(m);
     }
 
@@ -160,7 +160,7 @@ public final class MatrixProperty {
      * @param m
      * @return true if matrix is upper triangular in form
      */
-    public static boolean isUpperTriangular(Matrix m) {
+    public static boolean isUpperTriangular(final Matrix m) {
         return MatricesMeasure.areEqual(MatrixTransformer.extractUpperTriangular(m,0),m);
     }
 
@@ -170,7 +170,7 @@ public final class MatrixProperty {
      * @param m
      * @return true if matrix is lower triangular in form
      */
-    public static boolean isLowerTriangular(Matrix m) {
+    public static boolean isLowerTriangular(final Matrix m) {
         return MatricesMeasure.areEqual(MatrixTransformer.extractLowerTriangular(m,0),m);
     }
 
@@ -185,7 +185,7 @@ public final class MatrixProperty {
      * @return true iff a<sub>i</sub><sub>j</sub>=0 , for all i <> j  and a<sub>i</sub><sub>j</sub>=c , for all i = j
      * @see MatrixProperty#isDiagonal(org.jmatrices.dbl.Matrix)
      */
-    public static boolean isScalar(Matrix m) {
+    public static boolean isScalar(final Matrix m) {
         //we could have done this in many ways ..
         double tmp = 0.0;
         boolean firstIter = true;
@@ -212,8 +212,8 @@ public final class MatrixProperty {
 
 
     //Not sure but I hope it does what it says!
-    public static boolean isSymetricPositiveDefinite(Matrix m) {
-        return new CholeskyDecomposition(m).isSPD();
+    public static boolean isSymetricPositiveDefinite(final Matrix m) {
+        return new Cholesky(m).isSPD();
     }
 
     /**
@@ -222,7 +222,7 @@ public final class MatrixProperty {
      * @param m
      * @return
      */
-    public static boolean isDefinitePositive(Matrix m) {
+    public static boolean isDefinitePositive(final Matrix m) {
         throw new UnsupportedOperationException("to be implemented");
     }
 
@@ -232,7 +232,7 @@ public final class MatrixProperty {
      * @param m
      * @return
      */
-    public static boolean isSemiDefinitePositive(Matrix m) {
+    public static boolean isSemiDefinitePositive(final Matrix m) {
         throw new UnsupportedOperationException("to be implemented");
     }
 

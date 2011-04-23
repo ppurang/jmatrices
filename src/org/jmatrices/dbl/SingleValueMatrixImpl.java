@@ -1,3 +1,21 @@
+/**
+ * Jmatrices - Matrix Library
+ * Copyright (C) 2004  Piyush Purang
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library, see License.txt; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 package org.jmatrices.dbl;
 
 /**
@@ -47,7 +65,7 @@ class SingleValueMatrixImpl extends AbstractMatrix {
      * <br>Throws an UnsupportedOperationException in case the object is immutable</br>
      */
     protected void setValue0(int row, int col, double value) {
-        throw new UnsupportedOperationException("OneValue Matrices don't support modifing values");
+        throw new UnsupportedOperationException("SingleValue Matrices don't support modifying values");
     }
 
     /**
@@ -62,7 +80,7 @@ class SingleValueMatrixImpl extends AbstractMatrix {
     }
 
     public Object clone() {
-        return new SingleValueMatrixImpl(rows,cols,scalar);
+        return new SingleValueMatrixImpl(rows, cols, scalar);
     }
 
     protected Matrix createClone() {

@@ -3,8 +3,8 @@ package org.jmatrices.dbl.operator;
 import org.jmatrices.dbl.Matrix;
 import org.jmatrices.dbl.MatrixFactory;
 import org.jmatrices.dbl.Matrices;
-import org.jmatrices.dbl.decomposition.LUDecomposition;
-import org.jmatrices.dbl.decomposition.QRDecomposition;
+import org.jmatrices.dbl.decomposition.QR;
+import org.jmatrices.dbl.decomposition.LU;
 import org.jmatrices.dbl.measure.MatrixProperty;
 import org.jmatrices.dbl.transformer.MatrixEBETransformation;
 import org.jmatrices.dbl.transformer.MatrixEBETransformer;
@@ -18,7 +18,7 @@ import org.jmatrices.dbl.transformer.MatrixEBETransformer;
  * All operations on a matrix fitting this pattern can be found here!
  * </p>
  * <p/>
- * Author: purangp
+ * @author purangp
  * </p>
  * Date: 07.03.2004
  * Time: 18:09:51
@@ -31,7 +31,7 @@ public final class MatrixOperator {
      * <br/>
      * <strong>Usage:</strong> from {@link MatrixOperator#add(org.jmatrices.dbl.Matrix, org.jmatrices.dbl.Matrix)}
      * <pre>
-     * public static Matrix add(Matrix a, Matrix b) {
+     * public static Matrix add(final Matrix a, final Matrix b) {
      *       return applyEBEOperation(a, b, new MatrixEBEOperation() {
      *           public double apply(double a, double b) {
      *               return a + b;
@@ -41,7 +41,7 @@ public final class MatrixOperator {
      * </pre>
      * <strong>Hypothetical Usage:</strong>
      * <pre>
-     * public static Matrix doSomeThing(Matrix a, Matrix b, final double n) {
+     * public static Matrix doSomeThing(final Matrix a, final Matrix b, final double n) {
      *       return applyEBEOperation(a, b, new MatrixEBEOperation() {
      *           public double apply(double a, double b) {
      *               return (a^2 + b^2)^n;
@@ -56,13 +56,13 @@ public final class MatrixOperator {
      * @return resultant Matrix
      */
 
-    public static Matrix applyEBEOperation(Matrix a, Matrix b, MatrixEBEOperation mo) {
+    public static Matrix applyEBEOperation(final Matrix a, final Matrix b, MatrixEBEOperation mo) {
         int rows_a = a.rows(), cols_a = a.cols(), rows_b = b.rows(), cols_b = b.cols();
         Matrix c;
         if (rows_a != rows_b && cols_a != cols_b) {
             throw new IllegalArgumentException("Dimensions of a and b don't conform");
         } else {
-            c = MatrixFactory.getMatrix(rows_a, cols_b, a);
+            c = MatrixFactory.getMatrix(rows_a, cols_b, a, b);
             for (int row = 1; row <= rows_a; row++) {
                 for (int col = 1; col <= cols_a; col++) {
                     c.setValue(row, col, mo.apply(a.getValue(row, col), b.getValue(row, col)));
@@ -81,22 +81,22 @@ public final class MatrixOperator {
      * @param b The constant vector
      * @return The solution matrix or c = x / b
      */
-    public static Matrix solve(Matrix x, Matrix b) {
+    public static Matrix solve(final Matrix x, final Matrix b) {
         return (MatrixProperty.isSquare(x) ?
-                new LUDecomposition(x).solve(b) :
-                new QRDecomposition(x).solve(b));
+                new LU(x).solve(b) :
+                new QR(x).solve(b));
     }
 
     /**
      * Matrix Addition
-     * <p/>
+     * <br/>
      * Matrices must be of the same dimensions!
      *
      * @param a Matrix
      * @param b Matrix
      * @return c = a + b
      */
-    public static Matrix add(Matrix a, Matrix b) {
+    public static Matrix add(final Matrix a, final Matrix b) {
         return applyEBEOperation(a, b, new MatrixEBEOperation() {
             public double apply(double a, double b) {
                 return a + b;
@@ -113,7 +113,7 @@ public final class MatrixOperator {
      * @param b Matrix
      * @return c = a - b
      */
-    public static Matrix subtract(Matrix a, Matrix b) {
+    public static Matrix subtract(final Matrix a, final Matrix b) {
         return applyEBEOperation(a, b, new MatrixEBEOperation() {
             public double apply(double a, double b) {
                 return a - b;
@@ -133,13 +133,13 @@ public final class MatrixOperator {
      * @param b Matrix
      * @return c = a * b
      */
-    public static Matrix multiply(Matrix a, Matrix b) {
+    public static Matrix multiply(final Matrix a, final Matrix b) {
         int rows_a = a.rows(), cols_a = a.cols(), rows_b = b.rows(), cols_b = b.cols();
         Matrix c;
         if (cols_a != rows_b) {
             throw new IllegalArgumentException("Dimensions of matrices don't conform for multiplication");
         } else {
-            c = MatrixFactory.getMatrix(rows_a, cols_b, a);
+            c = MatrixFactory.getMatrix(rows_a, cols_b, a, b);
             //pick a row in a
             for (int row_a = 1; row_a <= rows_a; row_a++) {
 
@@ -171,7 +171,7 @@ public final class MatrixOperator {
      * @param b Matrix
      * @return c = a .* b
      */
-    public static Matrix multiplyEBE(Matrix a, Matrix b) {
+    public static Matrix multiplyEBE(final Matrix a, final Matrix b) {
         return applyEBEOperation(a, b, new MatrixEBEOperation() {
             public double apply(double a, double b) {
                 return a * b;
@@ -188,7 +188,7 @@ public final class MatrixOperator {
      * @param b Matrix
      * @return c = a ./ b
      */
-    public static Matrix divideEBE(Matrix a, Matrix b) {
+    public static Matrix divideEBE(final Matrix a, final Matrix b) {
         return applyEBEOperation(a, b, new MatrixEBEOperation() {
             public double apply(double a, double b) {
                 return a / b;
@@ -209,13 +209,13 @@ public final class MatrixOperator {
      * @param b Matrix
      * @return c = a~b //gauss syntax
      */
-    public static Matrix horizontalConcatenation(Matrix a, Matrix b) {
+    public static Matrix horizontalConcatenation(final Matrix a, final Matrix b) {
         int rows_a = a.rows(), cols_a = a.cols(), rows_b = b.rows(), cols_b = b.cols();
         Matrix c;
         if (rows_a != rows_b) {
             throw new IllegalArgumentException("Dimensions of a and b don't conform");
         } else {
-            c = MatrixFactory.getMatrix(rows_a, cols_a + cols_b, a);
+            c = MatrixFactory.getMatrix(rows_a, cols_a + cols_b, a, b);
             for (int row = 1; row <= rows_a; row++) {
                 for (int col_a = 1; col_a <= cols_a; col_a++) {
                     c.setValue(row, col_a, a.getValue(row, col_a));
@@ -241,13 +241,13 @@ public final class MatrixOperator {
      * @param b Matrix
      * @return c = a|b //gauss syntax
      */
-    public static Matrix verticalConcatenation(Matrix a, Matrix b) {
+    public static Matrix verticalConcatenation(final Matrix a, final Matrix b) {
         int rows_a = a.rows(), cols_a = a.cols(), rows_b = b.rows(), cols_b = b.cols();
         Matrix c;
         if (cols_a != cols_b) {
             throw new IllegalArgumentException("Dimensions of a and b don't conform");
         } else {
-            c = MatrixFactory.getMatrix(rows_a + rows_b, cols_a, a);
+            c = MatrixFactory.getMatrix(rows_a + rows_b, cols_a, a, b);
             for (int col = 1; col <= cols_a; col++) {
                 for (int row_a = 1; row_a <= rows_a; row_a++) {
                     c.setValue(row_a, col, a.getValue(row_a, col));
@@ -284,7 +284,7 @@ public final class MatrixOperator {
      * @param b
      * @return
      */
-    public static Matrix kroneckerProduct(Matrix a, Matrix b) {
+    public static Matrix kroneckerProduct(final Matrix a, final Matrix b) {
         /**
          * 1. pick first row
          * 2.      pick first column
@@ -345,7 +345,7 @@ public final class MatrixOperator {
      * @param b
      * @return
      */
-    public static Matrix horizontalDirectProduct(Matrix a, Matrix b) {
+    public static Matrix horizontalDirectProduct(final Matrix a, final Matrix b) {
         int rows_a = a.rows(), rows_b = b.rows();
         if(rows_a != rows_b)
             throw new IllegalArgumentException("Rows of a and b must be equal");

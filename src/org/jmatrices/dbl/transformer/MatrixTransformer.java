@@ -2,12 +2,12 @@ package org.jmatrices.dbl.transformer;
 
 import org.jmatrices.dbl.Matrix;
 import org.jmatrices.dbl.MatrixFactory;
+import org.jmatrices.dbl.Matrices;
 import org.jmatrices.dbl.measure.MatrixMeasure;
 import org.jmatrices.dbl.measure.MatrixProperty;
 import org.jmatrices.dbl.operator.MatrixOperator;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * MatrixTransformer is responsible for classical non element-by-element transformation of a matrix
@@ -34,9 +34,9 @@ public final class MatrixTransformer {
      * @param m Matrix
      * @return -a<sub>i</sub><sub>j</sub> for all i,j
      */
-    public static Matrix negate(Matrix m) {
-        return MatrixEBETransformer.ebeTransform(m, new MatrixEBETransformation() {
-            public double transform(double element) {
+    public static Matrix negate(final Matrix m) {
+        return MatrixEBETransformer.ebeTransform(m, new MatrixConditionalEBETransformation() {
+            public double transform(int row, int col, double element) {
                 return -element;
             }
         });
@@ -48,7 +48,7 @@ public final class MatrixTransformer {
      * @param m
      * @return A'
      */
-    public static Matrix transpose(Matrix m) {
+    public static Matrix transpose(final Matrix m) {
         int rows = m.rows(), cols = m.cols();
         Matrix transposed = MatrixFactory.getMatrix(cols, rows, m);
         for (int row = 1; row <= rows; row++) {
@@ -65,8 +65,8 @@ public final class MatrixTransformer {
      * @param m Matrix
      * @return A<sup>-1</sup>
      */
-    public static Matrix inverse(Matrix m) {
-        return MatrixOperator.solve(m, MatrixFactory.getIdentityMatrix(m.rows(), m));
+    public static Matrix inverse(final Matrix m) {
+        return MatrixOperator.solve(m, MatrixFactory.getIdentityMatrix(m.rows()));
     }
 
     /**
@@ -85,7 +85,7 @@ public final class MatrixTransformer {
      * @param m
      * @return c(mx1) column vector containing the diagonal elements of the matrix
      */
-    public static Matrix diagonal(Matrix m) {
+    public static Matrix diagonal(final Matrix m) {
         int rows = m.rows(), cols = m.cols();
         Matrix diagonal;
         if (rows == 1 && cols == 1) {
@@ -110,25 +110,27 @@ public final class MatrixTransformer {
      * @param offset the diagonal to be embeded (=0 will embed the elements as the main diagonal)
      * @return
      */
-    public static Matrix embedDiagonal(Matrix m, int offset) {
+    public static Matrix embedDiagonal(final Matrix m, int offset) {
+        int d = Math.abs(offset) + MatrixMeasure.length(m);
+        Matrix dm = MatrixFactory.getMatrix(d, d, m);
+        Matrix n = m;
+
         switch (m.rows()) {
             case 1:
                 //if row matrix let us convert it into column matrix and let program execution fall through to the next case
-                m = MatrixTransformer.transpose(m);
+                n = MatrixTransformer.transpose(m);
             default:
                 //not a row matrix
-                switch (m.cols()) {
+                switch (n.cols()) {
                     //if it is column vector or was a row vector and now is a column vector
                     case 1:
-                        int d = Math.abs(offset) + MatrixMeasure.length(m);
-                        Matrix dm = MatrixFactory.getMatrix(d, d, m);
                         if (offset > 0) {
-                            for (int row = 1; row <= MatrixMeasure.length(m); row++) {
-                                dm.setValue(row, row + offset, m.getValue(row, 1));
+                            for (int row = 1; row <= MatrixMeasure.length(n); row++) {
+                                dm.setValue(row, row + offset, n.getValue(row, 1));
                             }
                         } else {
-                            for (int row = 1; row <= MatrixMeasure.length(m); row++) {
-                                dm.setValue(row + Math.abs(offset), row, m.getValue(row, 1));
+                            for (int row = 1; row <= MatrixMeasure.length(n); row++) {
+                                dm.setValue(row + Math.abs(offset), row, n.getValue(row, 1));
                             }
                         }
                         return dm;
@@ -144,7 +146,7 @@ public final class MatrixTransformer {
      * @param offset the diagonal to be extracted (=0 will extract the main diagonal)
      * @return Column vector of elements extracted from the indiacated diagonal
      */
-    public static Matrix extractDiagonal(Matrix m, int offset) {
+    public static Matrix extractDiagonal(final Matrix m, int offset) {
         if (MatrixProperty.isVector(m)) {
             throw new IllegalArgumentException("Matrix m can't be a Column or a Row Vector");
         } else {
@@ -160,7 +162,7 @@ public final class MatrixTransformer {
                        list.add(new Double(m.getValue(row, row + offset)));
                     }
                 }
-                return MatrixFactory.getMatrix(list,m);
+                return Matrices.getColumnMatrixFromList(m,list);
             } else {
                 if (length + offset < 1)
                     throw new IllegalArgumentException("Length of the matrix and offset combine to yield illegal matrix indices");
@@ -174,7 +176,7 @@ public final class MatrixTransformer {
                         list.add(new Double(m.getValue(row + Math.abs(offset), row)));
                     }
                 }
-                return MatrixFactory.getMatrix(list, m);
+                return Matrices.getColumnMatrixFromList(m,list);
             }
         }
     }
@@ -187,7 +189,7 @@ public final class MatrixTransformer {
      * @param offset
      * @return
      */
-    public static Matrix extractUpperTriangular(Matrix m, int offset) {
+    public static Matrix extractUpperTriangular(final Matrix m, int offset) {
         int rows = m.rows(), cols = m.cols();
         Matrix ut = MatrixFactory.getMatrix(rows, cols,m);
         for (int row = 1; row <= MatrixMeasure.length(m) - Math.abs(offset); row++) {
@@ -217,7 +219,7 @@ public final class MatrixTransformer {
      * @param offset
      * @return
      */
-    public static Matrix extractLowerTriangular(Matrix m, int offset) {
+    public static Matrix extractLowerTriangular(final Matrix m, int offset) {
         return MatrixOperator.subtract(m, MatrixTransformer.extractUpperTriangular(m, offset + 1));
     }
 
@@ -225,13 +227,13 @@ public final class MatrixTransformer {
      * Multiplies the square matrix with itself multiple times.
      *
      * @param m is a square matrix
-     * @param n if n>1 performs the operation else if (n<=0) returns a matrix composed of ones.
+     * @param n if n>1 performs the operation else if (n<=0) returns an immutable matrix composed of ones.
      * @return C = A<sup>n</sup>
      */
-    public static Matrix pow(Matrix m, int n) {
+    public static Matrix pow(final Matrix m, int n) {
         if (MatrixProperty.isSquare(m)) {
             if (n <= 0)
-                return MatrixFactory.getMatrix(m.rows(), m.cols(), m, 1);
+                return MatrixFactory.getSingleValueMatrix(m.rows(), m.cols(), 1);
             Matrix result = m;
             for (int counter = 2; counter <= n; counter++) {  //if n==1 then just return m goon with the loop iff n >= 2
                 result = MatrixOperator.multiply(m, result);
@@ -255,7 +257,7 @@ public final class MatrixTransformer {
      * @param m
      * @return
      */
-    public static Matrix secondaryDiagonal(Matrix m) {
+    public static Matrix secondaryDiagonal(final Matrix m) {
         throw new UnsupportedOperationException("to be implemented");
     }
 
@@ -275,11 +277,11 @@ public final class MatrixTransformer {
      * @param m
      * @return
      */
-    public static Matrix cumulativeColumnProduct(Matrix m) {
+    public static Matrix cumulativeColumnProduct(final Matrix m) {
        Matrix result = MatrixFactory.getMatrix(m.rows(),m.cols(),m);
        for(int row=1; row<=m.rows();row++){
            for(int col=1; col<=m.cols(); col++){
-               if(row==1)
+               if(row==1)           //todo could be done using conditional transformation
                 result.setValue(row,col,m.getValue(row,col));
                else
                result.setValue(row,col,result.getValue(row-1,col)*m.getValue(row,col));
@@ -304,11 +306,11 @@ public final class MatrixTransformer {
      * @param m
      * @return
      */
-    public static Matrix cumulativeColumnSum(Matrix m) {
+    public static Matrix cumulativeColumnSum(final Matrix m) {
        Matrix result = MatrixFactory.getMatrix(m.rows(),m.cols(),m);
        for(int row=1; row<=m.rows();row++){
            for(int col=1; col<=m.cols(); col++){
-               if(row==1)
+               if(row==1)            //todo could be done using conditional transformation
                 result.setValue(row,col,m.getValue(row,col));
                else
                result.setValue(row,col,result.getValue(row-1,col)+m.getValue(row,col));

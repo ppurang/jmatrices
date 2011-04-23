@@ -1,9 +1,9 @@
-package org.jmatrices.dbl.reworkedDecomposition;
+package org.jmatrices.dbl.decomposition;
 
+import org.jmatrices.dbl.Matrices;
 import org.jmatrices.dbl.Matrix;
 import org.jmatrices.dbl.MatrixFactory;
-import org.jmatrices.dbl.Matrices;
-import org.jmatrices.dbl.syntax.MatlabSyntax;
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -53,60 +53,38 @@ public class Cholesky {
         isspd = (matrix.cols() == n);
 
         //for (int j = 0; j < n; j++) {
-        System.out.println("INITIATING MAIN LOOP (int j = 1; j <= "+n+"; j++)");
         for (int j = 1; j <= n; j++) {
-            System.out.println("\t Iteration " + j + " with value of j = " + j);
             //double[] Lrowj = L[j];
             Matrix Lrowj = Matrices.getRowMatrix(L, j);
-            System.out.print("\t L[j] = " + Lrowj) ;
             double d = 0.0;
             //for (int k = 0; k < j; k++) {
-            System.out.println("\t\tINITIATING INNER LOOP (int k = 1; k < "+ j +"; k++)");
             for (int k = 1; k < j; k++) {             //todo[fixed] an error here changed  k<=j to k<j
-                System.out.println("\t\t\t Iteration " + k + " with value of k = " + k);
                 //double[] Lrowk = L[k];
                 Matrix Lrowk = Matrices.getRowMatrix(L, k);
-                System.out.print("\t\t\t L[k] = " + Lrowk) ;
                 double s = 0.0;
                 //for (int i = 0; i < k; i++) {
-                System.out.println("\t\t\t\tINITIATING INNER LOOP (int i = 1; i <= "+ k +"; i++)");
                 for (int i = 1; i < k; i++) {     //todo perhaps need to change the same here.. I did that i<=k to i<k
                     //s += Lrowk[i] * Lrowj[i];
-                    System.out.println("\t\t\t\t\t Iteration " + i + " with value of i = " + i);
-                    System.out.println("\t\t\t\t\t Calculating value of s with s = " + s + ", Lrowk[i]= " + Lrowk.getValue(1, i) + ", Lrowj[i]= " + Lrowj.getValue(1, i));
                     s = s + Lrowk.getValue(1, i) * Lrowj.getValue(1, i);
-                    System.out.println("\t\t\t\t\t Value of s = " + s);
                 }
                 //Lrowj[k] = s = (A[j][k] - s) / L[k][k];
-                System.out.println("\t\t\t Calculating value of s with s = " + s + ", A[j,k]= " + A.getValue(j, k) + ", L[k,k]= " + L.getValue(k, k));
                 s = (A.getValue(j, k) - s) / L.getValue(k, k);
-                System.out.println("\t\t\t Value of s = " + s );
                 Lrowj.setValue(1, k, s);
                 L.setValue(j,k,s);
-                System.out.println("\t\t\t Value of Lrowj[k] = " + Lrowj.getValue(1, k) );
                 d = d + s * s;
-                System.out.println("\t\t\t Value of d = " + d );
                 //isspd = isspd & (A[k][j] == A[j][k]);
                 isspd = isspd & (A.getValue(k, j) == A.getValue(j, k));
-                System.out.println("\t\t\t Value of isspd = " + isspd );
             }
             //d = A[j][j] - d;
             d = A.getValue(j, j) - d;
-            System.out.println("\t Value of d = " + d );
             isspd = isspd & (d > 0.0);
-            System.out.println("\t Value of isspd = " + isspd );
             //L[j][j] = Math.sqrt(Math.max(d, 0.0));
             L.setValue(j, j, Math.sqrt(Math.max(d, 0.0)));
-            System.out.println("\t Value of L["+j+"]["+j+"] = " + Math.sqrt(Math.max(d, 0.0)) );
             //for (int k = j + 1; k < n; k++) {
-            System.out.println("\t\tINITIATING INNER LOOP (int k = "+(j+1)+"; k <= "+ n +"; k++)");
             for (int k = j + 1; k <= n; k++) {    //todo changed k=j+1+1 to k=j+1
                 //L[j][k] = 0.0;
-                System.out.println("\t\t\t Iteration " + k + " with value of k = " + k);
                 L.setValue(j, k, 0.0);
-                System.out.println("\t\t\t Value of L["+j+"]["+k+"] = " + 0.0 );
             }
-            System.out.println("\tL = " + L);
         }
     }
 
@@ -255,11 +233,10 @@ public class Cholesky {
         return X;
     }
 
-
-    public static void main(String[] args) {
+   /** public static void main(String[] args) {
         Matrix m = MatlabSyntax.create("   [     1,0,0;0,1,0;0,0,1    ]   ");
         Matrix b = MatlabSyntax.create("   [     1;1;1 ]   ");
-
+   */
         /*org.jmatrices.dbl.decomposition.CholeskyDecomposition cdl = new org.jmatrices.dbl.decomposition.CholeskyDecomposition(m);
         System.out.println(cdl.getL());
         System.out.println(cdl.solve(b));
@@ -268,12 +245,12 @@ public class Cholesky {
         System.out.println(cd.getL());
         System.out.println(cd.solve(b));*/
 
-        testCholskeyDecomposition();
+   /**     testCholskeyDecomposition();
 
-    }
+    }*/
 
 
-    public static void testCholskeyDecomposition() {
+   /** public static void testCholskeyDecomposition() {
         Matrix A = MatlabSyntax.create
                 ("["
                 + "3.00506436, 2.65577048, 3.08742844;"
@@ -290,13 +267,14 @@ public class Cholesky {
 
         //System.out.println(A);
         //new Cholesky(A).getL();
+        //System.out.println(new CholeskyDecomposition(A).solve(B));
+        System.out.println(new Cholesky(A).isSPD());
         System.out.println(new Cholesky(A).solve(B));
-        //System.out.println(new Cholesky(A).getL());
         System.out.println("***********************************************************");
         //new org.jmatrices.dbl.decomposition.CholeskyDecomposition(A).getL();
-        System.out.println(new org.jmatrices.dbl.decomposition.CholeskyDecomposition(A).solve(B));
-        //System.out.println(new org.jmatrices.dbl.decomposition.CholeskyDecomposition(A).getL());
+        //System.out.println(new org.jmatrices.dbl.decomposition.CholeskyDecomposition(A).solve(B));
+        System.out.println(new org.jmatrices.dbl.decomposition.CholeskyDecomposition(A).getL());
 
 
-    }
+    }   */
 }

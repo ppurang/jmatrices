@@ -1,9 +1,9 @@
-package org.jmatrices.dbl.reworkedDecomposition;
+package org.jmatrices.dbl.decomposition;
 
 import org.jmatrices.dbl.Matrices;
 import org.jmatrices.dbl.Matrix;
 import org.jmatrices.dbl.MatrixFactory;
-import org.jmatrices.dbl.syntax.GaussSyntax;
+
 
 /**
  * LUDecomposition <P> For an m-by-n matrix A with m >= n, the LU decomposition is an m-by-n unit lower triangular
@@ -18,7 +18,7 @@ import org.jmatrices.dbl.syntax.GaussSyntax;
  * <p/>
  * Author: purangp </p> Date: 08.03.2004 Time: 23:37:48
  */
-public class LUDecomposition {
+public class LU {
 /* ------------------------
    Class variables
  * ------------------------ */
@@ -55,7 +55,7 @@ public class LUDecomposition {
      *
      * @param a Rectangular matrix
      */
-    public LUDecomposition(Matrix a) {   //renamed A to a
+    public LU(Matrix a) {   //renamed A to a
         // Use a "left-looking", dot-product, Crout/Doolittle algorithm.
 
         LU = MatrixFactory.getMatrixClone(a);     //changed
@@ -276,7 +276,7 @@ public class LUDecomposition {
         return toReturn;
     }
 
-    public static void main(String[] args) {
+   /** public static void main(String[] args) {
         Matrix a = GaussSyntax.create
                 ("{"
                 + "3.00506436 2.65577048 3.08742844,"
@@ -289,30 +289,30 @@ public class LUDecomposition {
                 + "0.41823100,"
                 + "1.70129375"
                 + "}");
-        LUDecomposition decomposition = new LUDecomposition(a);
+        LU decomposition = new LU(a);    */
         /*System.out.println(decomposition.getL());
         System.out.println("********************");
         System.out.println(decomposition.getU());
         System.out.println("********************");
         System.out.println(decomposition.isSingular()); */
-        System.out.println("********************");
-        System.out.println(decomposition.solve(b));
+        //System.out.println("********************");
+        //System.out.println(decomposition.solve(b));
         /*System.out.println("********************");
         System.out.println(decomposition.getPivotMatrix()); */
-        System.out.println("********************");
-        org.jmatrices.dbl.reworkedDecomposition.LUDecomposition lu = new org.jmatrices.dbl.reworkedDecomposition.LUDecomposition(a);
+        //System.out.println("********************");
+        //org.jmatrices.dbl.decomposition.LU lu = new org.jmatrices.dbl.decomposition.LU(a);
         /*System.out.println(decomposition.getL());
         System.out.println("********************");
         System.out.println(decomposition.getU());
         System.out.println("********************");
         System.out.println(decomposition.isSingular()); */
-        System.out.println("********************");
-        System.out.println(lu.solve(b));
+        //System.out.println("********************");
+        //System.out.println(lu.solve(b));
         /*System.out.println("********************");
 
-        System.out.println(decomposition.getPivotMatrix()); */
+        System.out.println(decomposition.getPivotMatrix());
 
-    }
+    }     */
 
 /* ------------------------
    Temporary, experimental code.
