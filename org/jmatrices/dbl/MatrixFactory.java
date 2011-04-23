@@ -6,6 +6,7 @@ import org.jmatrices.dbl.transformer.MatrixEBETransformer;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * MatrixFactory is one-stop shop for creating matrices.
@@ -15,7 +16,6 @@ import java.util.List;
  * </ol>
  * <p/>
  * <font color="blue">
- * todo how to provide a mechanism to change implementations (from LightMatrixImpl to HeavyMatrixImpl), intelligent choice or user's choice?
  * <br/>todo consider deserialization of matrices from ascii, mathml, xml files.
  * <br/>todo serialization? through matrix interface ?
  * </font>
@@ -26,38 +26,28 @@ import java.util.List;
  * Time: 15:56:59
  */
 public class MatrixFactory {
-    /**
-     * Please refer to the java doc of EmptyMatrix to see the reason for deprecation
-     *
-     * @return
-     * @deprecated
-     */
-    public static Matrix getEmptyMatrix() {
-        return new EmptyMatrix();
-    }
+    public static ArrayList factoryList = new ArrayList();
 
     /**
      * Gets a matrix of the asked dimensions.
      * <p/>
-     * All elements are set to 0.0
+     * All elements are setValue to 0.0
      *
-     * @param rows number of rows in the matrix (> 1)
-     * @param cols number of columns in the matrix (> 1)
+     * @param rows number of rows in the matrix (>= 1)
+     * @param cols number of columns in the matrix (>= 1)
      * @param hint acts as a hint for the right implementation to use
      * @return Matrix of the given dimensions
      */
-    public static Matrix getMatrix(int rows, int cols, Matrix hint) {
-        if (hint instanceof HeavyMatrixImpl)
-            return new HeavyMatrixImpl(rows, cols);
-        return new LightMatrixImpl(rows, cols);
+    public static Matrix getMatrix(int rows, int cols, Matrix hint) { 
+        return new ArrayMatrixImpl(rows, cols);
     }
 
     /**
      * Gets a matrix of the asked dimensions, filled with random values
      * <p/>
      *
-     * @param rows number of rows in the matrix (> 1)
-     * @param cols number of columns in the matrix (> 1)
+     * @param rows number of rows in the matrix (>= 1)
+     * @param cols number of columns in the matrix (>= 1)
      * @param hint acts as a hint for the right implementation to use
      * @return Matrix of the given dimensions
      */
@@ -72,10 +62,10 @@ public class MatrixFactory {
     /**
      * Gets a matrix of the asked dimensions.
      * <p/>
-     * All elements are set to scalar.
+     * All elements are setValue to scalar.
      *
-     * @param rows   number of rows in the matrix (> 1)
-     * @param cols   number of columns in the matrix (> 1)
+     * @param rows   number of rows in the matrix (>= 1)
+     * @param cols   number of columns in the matrix (>= 1)
      * @param hint   acts as a hint for the right implementation to use
      * @param scalar initial value of the elements
      * @return Matrix of the given dimensions and value
@@ -87,10 +77,10 @@ public class MatrixFactory {
     /**
      * Gets a matrix of the asked dimensions.
      * <p/>
-     * All elements are set to values in the passed array.
+     * All elements are setValue to values in the passed array.
      *
-     * @param rows   number of rows in the matrix (> 1)
-     * @param cols   number of columns in the matrix (> 1)
+     * @param rows   number of rows in the matrix (>= 1)
+     * @param cols   number of columns in the matrix (>= 1)
      * @param hint   acts as a hint for the right implementation to use
      * @param values initial value of the elements
      * @return Matrix of the given dimensions and values
@@ -105,7 +95,7 @@ public class MatrixFactory {
      *
      * @param dim  dimension of the square matrix
      * @param hint acts as a hint for the right implementation to use
-     * @return Square matrix with the diagonal elements set to 1.
+     * @return Square matrix with the diagonal elements setValue to 1.
      */
     public static Matrix getIdentityMatrix(int dim, Matrix hint) {
         return getScalarMatrix(dim, hint, 1);
@@ -116,8 +106,8 @@ public class MatrixFactory {
      *
      * @param dim    dimension of the square matrix
      * @param hint   acts as a hint for the right implementation to use
-     * @param scalar the value the main diagonal elements have to be set to
-     * @return Square matrix with the diagonal elements set to scalar value.
+     * @param scalar the value the main diagonal elements have to be setValue to
+     * @return Square matrix with the diagonal elements setValue to scalar value.
      */
     public static Matrix getScalarMatrix(int dim, Matrix hint, final double scalar) {
         Matrix m = MatrixFactory.getMatrix(dim, dim, hint);
@@ -149,7 +139,7 @@ public class MatrixFactory {
         int row = 1;
         while (iter.hasNext()) {
             Double o = (Double) iter.next();
-            cv.set(row, 1, o.doubleValue());
+            cv.setValue(row, 1, o.doubleValue());
             row++;
         }
         return cv;
@@ -183,7 +173,7 @@ public class MatrixFactory {
         if (checkConformity(elems, m.rows(), m.cols())) {
             for (int i = 0; i < elems.length; i++) {
                 for (int j = 0; j < elems[i].length; j++) {
-                    m.set(i + 1, j + 1, elems[i][j]);
+                    m.setValue(i + 1, j + 1, elems[i][j]);
                 }
             }
             return m;

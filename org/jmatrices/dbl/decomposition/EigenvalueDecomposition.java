@@ -865,7 +865,7 @@ public class EigenvalueDecomposition {
             }
         }
 
-        // Back transformer to get eigenvectors of original matrix
+        // Back transformer to getValue eigenvectors of original matrix
 
         for (int j = nn - 1; j >= low; j--) {
             for (int i = low; i <= high; i++) {
@@ -892,7 +892,7 @@ public class EigenvalueDecomposition {
 
     public EigenvalueDecomposition(Matrix matrix) {
         hint = matrix;
-        double[][] A = matrix.get();
+        double[][] A = matrix.getValues();
         n = matrix.cols();
         V = new double[n][n];
         d = new double[n];

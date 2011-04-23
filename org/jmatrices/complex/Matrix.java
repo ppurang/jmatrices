@@ -42,7 +42,7 @@ public interface Matrix extends java.io.Serializable {
      *
      * @param row   row in which the element occurs
      * @param col   column in which the element occurs
-     * @param value the new value to be set
+     * @param value the new value to be setValue
      */
     void set(int row, int col, Complex value);
 
@@ -55,7 +55,7 @@ public interface Matrix extends java.io.Serializable {
      */
     Complex get(int row, int col);
 
-    //todo should we return arrays or matrices?  we don't have to return arrays as get returns the store array perhaps we should move these to transformer package!!!
+    //todo should we return arrays or matrices?  we don't have to return arrays as getValue returns the store array perhaps we should move these to transformer package!!!
     /**
      * Gets the entire row as a matrix
      *

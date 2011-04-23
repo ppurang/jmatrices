@@ -1,4 +1,4 @@
-package org.jmatrices.dbl.client;
+package org.jmatrices.dbl.syntax;
 
 import org.jmatrices.dbl.Matrix;
 import org.jmatrices.dbl.MatrixFactory;
@@ -21,7 +21,7 @@ import java.util.Iterator;
  * Date: 30.04.2004
  * Time: 14:49:39
  */
-public class MatlabSyntax {
+public final class MatlabSyntax {
     /**
      * Creation
      */
@@ -358,9 +358,9 @@ public class MatlabSyntax {
         result[0] = chol.getL();
         Matrix p = MatrixFactory.getMatrix(1, 1, null);
         if (chol.isSPD())
-            p.set(1, 1, 0);
+            p.setValue(1, 1, 0);
         else
-            p.set(1, 1, 1);
+            p.setValue(1, 1, 1);
         result[1] = p;
         return result;
     }
@@ -385,11 +385,11 @@ public class MatlabSyntax {
         str +="\teye(3,4)\t\teye(3,4)\n";
         str +="\n";
         str +="------------------------Matrix operators------------------------\n";
-        str +="\tA(1,2)\t\tA.get(1,2)\n";
-        str +="\tA(1,2)=3.5\t\tA.set(1,2,3.5)\n";
+        str +="\tA(1,2)\t\tA.getValue(1,2)\n";
+        str +="\tA(1,2)=3.5\t\tA.setValue(1,2,3.5)\n";
         str +="\t[m,n] = size(A)\t\tm=A.rows(),n=A.cols()\n";
-        str +="\tA(:,j)\t\tA.getColumn(j)\n";
-        str +="\tA(i,:)\t\tA.getRow(i)\n";
+        str +="\tA(:,j)\t\tA.getColumnMatrix(j)\n";
+        str +="\tA(i,:)\t\tA.getRowMatrix(i)\n";
         str +="\n";
         str +="\t-A\t\tneg(A)\n";
         str +="\tA+B\t\tadd(A,B)\n";
@@ -488,7 +488,7 @@ public class MatlabSyntax {
         System.out.println("norm ->" + norm(m));
         System.out.println("norm 1 ->" + norm_1(m));
         System.out.println("norm Inf ->" + normInf(m));
-        System.out.println("norm Forb ->" + normFro(m) + " [OR]" + Math.sqrt(ColumnTransformer.sum(diag(multiply(t(m), m))).get(1, 1)));
+        System.out.println("norm Forb ->" + normFro(m) + " [OR]" + Math.sqrt(ColumnTransformer.sum(diag(multiply(t(m), m))).getValue(1, 1)));
         System.out.println("--------------------------");
     }
 
@@ -521,3 +521,21 @@ public class MatlabSyntax {
     */
 }
 
+/**
+ *  Jmatrices - Matrix Library
+    Copyright (C) 2004  Piyush Purang
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library, see License.txt; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */ 

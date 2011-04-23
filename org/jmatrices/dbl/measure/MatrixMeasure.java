@@ -44,7 +44,7 @@ public final class MatrixMeasure {
      * @return trace
      */
     public static double getTrace(Matrix m) {
-        return ColumnTransformer.sum(MatrixTransformer.diagonal(m)).get(1, 1);
+        return ColumnTransformer.sum(MatrixTransformer.diagonal(m)).getValue(1, 1);
     }
 
     /**
@@ -57,7 +57,7 @@ public final class MatrixMeasure {
         return (new SingularValueDecomposition(m)).rank();
     }
 
-    //todo do we really need get suffix? as we haven't used it any where else .. that doesn't seem very consistent!!!
+    //todo do we really need getValue suffix? as we haven't used it any where else .. that doesn't seem very consistent!!!
     //reasons for .. because it is a gettable property of a matrix
     /**
      * Gets the maximum value occuring in the matrix
@@ -66,7 +66,7 @@ public final class MatrixMeasure {
      * @return maximum value
      */
     public static double getMax(Matrix m) {
-        return (RowTransformer.max(ColumnTransformer.max(m))).get(1, 1);
+        return (RowTransformer.max(ColumnTransformer.max(m))).getValue(1, 1);
     }
 
     /**
@@ -76,7 +76,7 @@ public final class MatrixMeasure {
      * @return minimum value
      */
     public static double getMin(Matrix m) {
-        return (RowTransformer.min(ColumnTransformer.min(m))).get(1, 1);
+        return (RowTransformer.min(ColumnTransformer.min(m))).getValue(1, 1);
     }
 
     /**
@@ -86,7 +86,7 @@ public final class MatrixMeasure {
      * @return sum of all values
      */
     public static double getSum(Matrix m) {
-        return (RowTransformer.sum(ColumnTransformer.sum(m))).get(1, 1);
+        return (RowTransformer.sum(ColumnTransformer.sum(m))).getValue(1, 1);
     }
 
     /**
@@ -96,7 +96,7 @@ public final class MatrixMeasure {
      * @return product of all values
      */
     public static double getProduct(Matrix m) {
-        return (RowTransformer.product(ColumnTransformer.product(m))).get(1, 1);
+        return (RowTransformer.product(ColumnTransformer.product(m))).getValue(1, 1);
     }
 
     /**
@@ -113,7 +113,7 @@ public final class MatrixMeasure {
         if (adjustment)
             return ((prod / (prod - 1)) * getMean(m, false));
         else
-            return RowTransformer.mean(ColumnTransformer.mean(m, false), false).get(1, 1);
+            return RowTransformer.mean(ColumnTransformer.mean(m, false), false).getValue(1, 1);
     }
 
 
@@ -128,7 +128,7 @@ public final class MatrixMeasure {
             public double transform(double element) {
                 return Math.abs(element);
             }
-        }))).get(1, 1);
+        }))).getValue(1, 1);
     }
 
     /**
@@ -153,7 +153,7 @@ public final class MatrixMeasure {
             public double transform(double element) {
                 return Math.abs(element);
             }
-        }))).get(1, 1);
+        }))).getValue(1, 1);
     }
 
     /**
@@ -168,7 +168,7 @@ public final class MatrixMeasure {
                 return element * element;
             }
         })));
-        //Math.sqrt(ColumnTransformer.sum(diag(multiply(t(m),m))).get(1,1))
+        //Math.sqrt(ColumnTransformer.sum(diag(multiply(t(m),m))).getValue(1,1))
     }
 
     /**

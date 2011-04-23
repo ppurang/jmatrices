@@ -51,9 +51,9 @@ public final class ColumnTransformer {
             for (int col = 1; col <= cols_c; col++) {
                 double sumCol = 0D;
                 for (int row = 1; row <= rows_c; row++) {
-                    sumCol += m.get(row, col);
+                    sumCol += m.getValue(row, col);
                 }
-                d.set(1, col, sumCol);
+                d.setValue(1, col, sumCol);
             }
         }
         return d;
@@ -75,9 +75,9 @@ public final class ColumnTransformer {
             for (int col = 1; col <= cols_c; col++) {
                 double prodCol = 1D;
                 for (int row = 1; row <= rows_c; row++) {
-                    prodCol = prodCol * m.get(row, col);
+                    prodCol = prodCol * m.getValue(row, col);
                 }
-                d.set(1, col, prodCol);
+                d.setValue(1, col, prodCol);
             }
         }
         return d;
@@ -104,9 +104,9 @@ public final class ColumnTransformer {
             for (int col = 1; col <= cols_c; col++) {
                 double sumCol = 0D;
                 for (int row = 1; row <= rows_c; row++) {
-                    sumCol += m.get(row, col);
+                    sumCol += m.getValue(row, col);
                 }
-                d.set(1, col, sumCol / den);
+                d.setValue(1, col, sumCol / den);
             }
         }
         return d;
@@ -129,7 +129,7 @@ public final class ColumnTransformer {
                 double max = 0D;
                 boolean firstiter = true;
                 for (int row = 1; row <= rows_c; row++) {
-                    double tmp = m.get(row, col);
+                    double tmp = m.getValue(row, col);
                     if (!firstiter) {
                         max = Math.max(tmp, max);
                     } else {
@@ -137,7 +137,7 @@ public final class ColumnTransformer {
                         firstiter = false;
                     }
                 }
-                d.set(1, col, max);
+                d.setValue(1, col, max);
             }
         }
         return d;
@@ -160,7 +160,7 @@ public final class ColumnTransformer {
                 double min = 0D;
                 boolean firstiter = true;
                 for (int row = 1; row <= rows_c; row++) {
-                    double tmp = m.get(row, col);
+                    double tmp = m.getValue(row, col);
                     if (!firstiter) {
                         min = Math.min(tmp, min);
                     } else {
@@ -168,7 +168,7 @@ public final class ColumnTransformer {
                         firstiter = false;
                     }
                 }
-                d.set(1, col, min);
+                d.setValue(1, col, min);
             }
         }
         return d;

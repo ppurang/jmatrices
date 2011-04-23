@@ -1,32 +1,47 @@
 package org.jmatrices.dbl;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 /**
- * MatrixVector
- * <p>
- * <font color="blue">
- * todo - open thought!
- * </font>
- * </p>
+ * ArrayMatrixImpl
  * <p>
  * Author: purangp
  * </p>
- * Date: 10.03.2004
- * Time: 16:50:35
+ * Date: 07.03.2004
+ * Time: 16:06:06
  */
-public interface MatrixVector {
-    int rows();
+class ArrayMatrixImpl extends AbstractMatrix implements Matrix {
+    protected int rows, cols;
+    protected double[][] rowView;
 
-    int cols();
+    protected ArrayMatrixImpl() {
+    }
 
-    double get(int row, int col);
+    public ArrayMatrixImpl(int rows, int cols) {
+            super(rows,cols);
+            rowView = new double[rows][cols];
+    }
 
-    void set(int row, int col, double value);
+    /**
+     * @param row
+     * @param col
+     * @param value
+     */
+    public void setValue(int row, int col, double value) {
+        rowView[row - 1][col - 1] = value;
+    }
 
-    Vector getRowVector(int row);
-
-    Vector getColumnVector(int col);
+    /**
+     * @param row
+     * @param col
+     * @return
+     */
+    public double getValue(int row, int col) {
+        return rowView[row - 1][col - 1];
+    }
 }
-
 
 /**
  *  Jmatrices - Matrix Library
@@ -45,4 +60,4 @@ public interface MatrixVector {
     You should have received a copy of the GNU Lesser General Public
     License along with this library, see License.txt; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */ 
+ */

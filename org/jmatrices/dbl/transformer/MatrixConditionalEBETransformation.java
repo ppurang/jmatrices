@@ -12,7 +12,7 @@ package org.jmatrices.dbl.transformer;
  * public static Matrix getScalarMatrix(int dim, final double scalar) {
  *       Matrix m = MatrixFactory.getMatrix(dim, dim);
  *       return MatrixEBETransformer.ebeTransform(m, new MatrixConditionalEBETransformation() {
- *           public double transformer(int row, int col, double element) {
+ *           public double transform(int row, int col, double element) {
  *               if (row == col)
  *                   return scalar;
  *               return

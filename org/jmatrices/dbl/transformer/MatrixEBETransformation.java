@@ -13,7 +13,7 @@ package org.jmatrices.dbl.transformer;
  * <pre>
  * private static Matrix scalarAddition(Matrix m, final double s) {
  *       return MatrixEBETransformer.ebeTransform(m, new MatrixEBETransformation() {
- *           public double transformer(double element) {
+ *           public double transform(double element) {
  *               return element + s; //could be +, *, -, /
  *           }
  *       });
@@ -22,7 +22,7 @@ package org.jmatrices.dbl.transformer;
  * <pre>
  * // unary minus or negation
  * new MatrixEBETransformation() {
- *      double transformer(double element) {
+ *      double transform(double element) {
  *          return -element;
  *      }
  * };
@@ -30,7 +30,7 @@ package org.jmatrices.dbl.transformer;
  * <pre>
  * //scalar multiplication
  * new MatrixEBETransformation() {
- *      double transformer(double element) {
+ *      double transform(double element) {
  *          return 2 * element;
  *      }
  * };
@@ -38,7 +38,7 @@ package org.jmatrices.dbl.transformer;
  * <pre>
  * // function application
  * new MatrixEBETransformation() {
- *      double transformer(double element) {
+ *      double transform(double element) {
  *          return Math.sin(element);
  *      }
  * };

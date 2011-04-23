@@ -8,7 +8,7 @@ package org.jmatrices.dbl.decomposition;
  * Date: 13.03.2004
  * Time: 13:54:46
  */
-public class Util {
+public final class Util {
     public static double hypot(double a, double b) {
         double r;
         if (Math.abs(a) > Math.abs(b)) {
@@ -40,7 +40,15 @@ public class Util {
 
         return 0;
     }
-
+    /**
+     * Signum function
+     * returns 1 if the <code>a</code>
+     * is greater than zero, 0 if it equals zero and -1 if it is
+     * less than zero.
+     *
+     * @param a
+     * @return
+     */
     public static int sign(double a) {
         if (a > 0)
             return 1;

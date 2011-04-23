@@ -87,7 +87,7 @@ public class SingularValueDecomposition {
          hint = matrix;
         // Derived from LINPACK code.
         // Initialize.
-        double[][] A = matrix.get();   //changed
+        double[][] A = matrix.getValues();   //changed
         m = matrix.rows();          //changed
         n = matrix.cols();          //changed
         int nu = Math.min(m, n);
@@ -292,7 +292,7 @@ public class SingularValueDecomposition {
 
             // This section of the program inspects for
             // negligible elements in the s and e arrays.  On
-            // completion the variables kase and k are set as follows.
+            // completion the variables kase and k are setValue as follows.
 
             // kase = 1     if s(p) and e[k-1] are negligible and k<p
             // kase = 2     if s(k) is negligible and k<p

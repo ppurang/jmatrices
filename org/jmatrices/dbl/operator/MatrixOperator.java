@@ -64,7 +64,7 @@ public final class MatrixOperator {
             c = MatrixFactory.getMatrix(rows_a, cols_b, a);
             for (int row = 1; row <= rows_a; row++) {
                 for (int col = 1; col <= cols_a; col++) {
-                    c.set(row, col, mo.apply(a.get(row, col), b.get(row, col)));
+                    c.setValue(row, col, mo.apply(a.getValue(row, col), b.getValue(row, col)));
                 }
             }
         }
@@ -150,10 +150,10 @@ public final class MatrixOperator {
                         double tmp = 0D;
                         //iterate over all rows in the selected col for b
                         for (int row_b = 1; row_b <= rows_b; row_b++) {
-                            double elem_a = a.get(row_a, row_b), elem_b = b.get(row_b, col_b);
+                            double elem_a = a.getValue(row_a, row_b), elem_b = b.getValue(row_b, col_b);
                             tmp = tmp + elem_a * elem_b;
                         }
-                        c.set(row_a, col_b, tmp);
+                        c.setValue(row_a, col_b, tmp);
                     }
                 }
             }
@@ -217,10 +217,10 @@ public final class MatrixOperator {
             c = MatrixFactory.getMatrix(rows_a, cols_a + cols_b, a);
             for (int row = 1; row <= rows_a; row++) {
                 for (int col_a = 1; col_a <= cols_a; col_a++) {
-                    c.set(row, col_a, a.get(row, col_a));
+                    c.setValue(row, col_a, a.getValue(row, col_a));
                 }
                 for (int col_b = 1; col_b <= cols_b; col_b++) {
-                    c.set(row, cols_a + col_b, b.get(row, col_b));
+                    c.setValue(row, cols_a + col_b, b.getValue(row, col_b));
                 }
             }
         }
@@ -249,10 +249,10 @@ public final class MatrixOperator {
             c = MatrixFactory.getMatrix(rows_a + rows_b, cols_a, a);
             for (int col = 1; col <= cols_a; col++) {
                 for (int row_a = 1; row_a <= rows_a; row_a++) {
-                    c.set(row_a, col, a.get(row_a, col));
+                    c.setValue(row_a, col, a.getValue(row_a, col));
                 }
                 for (int row_b = 1; row_b <= rows_b; row_b++) {
-                    c.set(rows_a + row_b, col, b.get(row_b, col));
+                    c.setValue(rows_a + row_b, col, b.getValue(row_b, col));
                 }
             }
         }
@@ -302,7 +302,7 @@ public final class MatrixOperator {
             Matrix horizVert = null;
             //columns in a row
             for (int col = 1; col <= a.cols(); col++) {
-                final double scalar = a.get(row, col);
+                final double scalar = a.getValue(row, col);
                 if (horizVert == null)
                     horizVert = MatrixEBETransformer.ebeTransform(b, new MatrixEBETransformation() {
                         public double transform(double element) {
@@ -351,7 +351,7 @@ public final class MatrixOperator {
         else {
             Matrix tmpVert=null;
             for (int row=1; row<=rows_a; row++) {
-                Matrix rowA = a.getRow(row), rowB = b.getRow(row);
+                Matrix rowA = a.getRowMatrix(row), rowB = b.getRowMatrix(row);
                 if (tmpVert == null)
                     tmpVert = MatrixOperator.kroneckerProduct(rowA,rowB);
                 else

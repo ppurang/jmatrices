@@ -53,18 +53,10 @@ public class TestMatrices {
         //TestMatrices.testExtractLowerTriangular();
         //TestMatrices.testPutDiagonal();
         //TestMatrices.testGetDiagonal();
-        TestMatrices.testInstanceOfNull();
+
     }
 
-    private static void testInstanceOfNull() {
-        Matrix m = null;
-        if (m instanceof LightMatrixImpl) {
-            System.out.println("LightMatrixImpl");
-        } else if (m instanceof HeavyMatrixImpl) {
-            System.out.println("HeavyMatrixImpl");
-        }
-        System.out.println("Null");
-    }
+
 
     private static void testGetDiagonal() {
         //Matrix[] m = {getMatrix55(), getMatrix35(), getMatrix53()};
@@ -271,12 +263,7 @@ public class TestMatrices {
         System.out.println(MatrixMeasure.getDeterminant(getSymetricMatrix()));
     }
 
-    private static void testSubmatrix() {
-        testSubmatrix(get55Matrix());
-        System.out.println("@@@@@@@@@@@@@@@@@@@@HeavyMatrix@@@@@@@@@@@@@@@@@@@@@@@@@@@@@q");
-        Matrix heavyMatrix = new HeavyMatrixImpl(5, 5);
-        testSubmatrix(MatrixFactory.getMatrix(5, 5, null, get55Matrix().get()));
-    }
+
 
     private static void testSubmatrix(Matrix matrix) {
         System.out.println("1,1 -> 5,5");
@@ -367,34 +354,16 @@ public class TestMatrices {
 
     private static void testGet() {
         Matrix m1 = MatrixFactory.getMatrix(3, 4, null);
-        double[][] store = m1.get();
+        double[][] store = m1.getValues();
         store[0][0] = 1;
         System.out.println(m1);
         System.out.println(MatrixFactory.getMatrix(3, 4, null, store));
 
     }
 
-    private static void testHeavyMatrix() {
-        HeavyMatrixImpl hm = new HeavyMatrixImpl(3, 2);
-        hm.set(1, 1, 1);
-        hm.set(1, 2, 4);
-        hm.set(2, 1, 2);
-        hm.set(2, 2, 5);
-        hm.set(3, 1, 3);
-        hm.set(3, 2, 6);
-        testHeavyMatrix(hm);
 
 
-    }
 
-    private static void testHeavyMatrix(HeavyMatrixImpl hm) {
-        System.out.println(hm);
-        Matrix row1 = hm.getRow(1);
-        System.out.println(row1);
-        System.out.println(hm.getColumn(1));
-        System.out.println(hm.getRow(3));
-        System.out.println(hm.getColumn(2));
-    }
 
     private static void testTransformations() {
         testScalarTransformation();
@@ -432,18 +401,18 @@ public class TestMatrices {
 
     private static void testMultiply() {
         Matrix a = MatrixFactory.getMatrix(3, 4, null);
-        a.set(1, 1, 1);
-        a.set(1, 4, 3);
-        a.set(2, 1, 4);
-        a.set(2, 2, 5);
-        a.set(3, 3, 4);
-        a.set(3, 4, 5);
+        a.setValue(1, 1, 1);
+        a.setValue(1, 4, 3);
+        a.setValue(2, 1, 4);
+        a.setValue(2, 2, 5);
+        a.setValue(3, 3, 4);
+        a.setValue(3, 4, 5);
 
         Matrix b = MatrixFactory.getMatrix(4, 3, null);
-        b.set(1, 1, 3);
-        b.set(4, 1, 7);
-        b.set(4, 2, 8);
-        b.set(4, 3, 9);
+        b.setValue(1, 1, 3);
+        b.setValue(4, 1, 7);
+        b.setValue(4, 2, 8);
+        b.setValue(4, 3, 9);
 
         System.out.println(MatrixOperator.multiply(a, b));
 
@@ -461,15 +430,15 @@ public class TestMatrices {
 
     private static void testColumnOperators() {
         Matrix a = MatrixFactory.getMatrix(3, 4, null);
-        a.set(1, 1, 1);
-        a.set(1, 4, 3);
-        a.set(2, 1, 4);
-        a.set(2, 2, 5);
-        a.set(2, 4, -5);
+        a.setValue(1, 1, 1);
+        a.setValue(1, 4, 3);
+        a.setValue(2, 1, 4);
+        a.setValue(2, 2, 5);
+        a.setValue(2, 4, -5);
         ;
-        a.set(2, 3, -5);
-        a.set(3, 3, 4);
-        a.set(3, 4, 5);
+        a.setValue(2, 3, -5);
+        a.setValue(3, 3, 4);
+        a.setValue(3, 4, 5);
         System.out.println(a);
         System.out.println(ColumnTransformer.sum(a));
         System.out.println(ColumnTransformer.product(a));
@@ -485,15 +454,15 @@ public class TestMatrices {
 
     private static void testRowOperators() {
         Matrix a = MatrixFactory.getMatrix(3, 4, null);
-        a.set(1, 1, 1);
-        a.set(1, 4, 3);
-        a.set(2, 1, 4);
-        a.set(2, 2, 5);
-        a.set(2, 4, -5);
+        a.setValue(1, 1, 1);
+        a.setValue(1, 4, 3);
+        a.setValue(2, 1, 4);
+        a.setValue(2, 2, 5);
+        a.setValue(2, 4, -5);
 
-        a.set(2, 3, -5);
-        a.set(3, 3, 4);
-        a.set(3, 4, 5);
+        a.setValue(2, 3, -5);
+        a.setValue(3, 3, 4);
+        a.setValue(3, 4, 5);
                 System.out.println(a);
         System.out.println(RowTransformer.sum(a));
         System.out.println(RowTransformer.product(a));
@@ -510,11 +479,11 @@ public class TestMatrices {
 
     private static void testMatrixMeasures() {
         Matrix a = MatrixFactory.getMatrix(2, 2, null);
-        a.set(1, 1, 2);
-        a.set(1, 2, 3);
-        a.set(2, 1, 2);
-        a.set(2, 2, 3);
-        ((LightMatrixImpl) a).toString();
+        a.setValue(1, 1, 2);
+        a.setValue(1, 2, 3);
+        a.setValue(2, 1, 2);
+        a.setValue(2, 2, 3);
+        ((ArrayMatrixImpl) a).toString();
         System.out.println(MatrixMeasure.getMax(a));
         System.out.println(MatrixMeasure.getMin(a));
         System.out.println(MatrixMeasure.getSum(a));
@@ -525,12 +494,12 @@ public class TestMatrices {
 
     private static void testDiagonalTrace() {
         Matrix a = MatrixFactory.getMatrix(2, 3, null);
-        a.set(1, 1, 1);
-        a.set(1, 2, 0);
-        a.set(1, 3, 1);
-        a.set(2, 1, 0);
-        a.set(2, 2, 1);
-        a.set(2, 3, 1);
+        a.setValue(1, 1, 1);
+        a.setValue(1, 2, 0);
+        a.setValue(1, 3, 1);
+        a.setValue(2, 1, 0);
+        a.setValue(2, 2, 1);
+        a.setValue(2, 3, 1);
         System.out.println(a);
         System.out.println(MatrixTransformer.diagonal(a));
         System.out.println(MatrixMeasure.getTrace(a));

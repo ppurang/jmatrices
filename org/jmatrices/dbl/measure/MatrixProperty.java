@@ -126,7 +126,7 @@ public final class MatrixProperty {
         if (isSquare(m)) {
             for (int row = 1; row <= m.rows(); row++) {
                 for (int col = 1; col <= m.cols(); col++) {
-                    if (row != col && m.get(row, col) != 0)
+                    if (row != col && m.getValue(row, col) != 0)
                         return false;
                 }
             }
@@ -193,14 +193,14 @@ public final class MatrixProperty {
         if (isSquare(m)) {
             for (int row = 1; row <= m.rows(); row++) {
                 for (int col = 1; col <= m.cols(); col++) {
-                    if (row != col && m.get(row, col) != 0)
+                    if (row != col && m.getValue(row, col) != 0)
                         return false;
                     else if (row == col) {
                         if (firstIter) {
-                            tmp = m.get(row, col);
+                            tmp = m.getValue(row, col);
                             firstIter = false;
                         } else {
-                            if (tmp != m.get(row, col))
+                            if (tmp != m.getValue(row, col))
                                 return false;
                         }
                     }

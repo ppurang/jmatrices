@@ -2,7 +2,7 @@ package org.jmatrices.dbl;
 /**
  * Matrix represents a <strong>structurally immutable</strong> matrix of numbers(double) with <strong>index begining at 1</strong>.
  * <p>
- * The only way to change the elements in a matrix is through {@link #set(int, int, double)}
+ * The only way to change the elements in a matrix is through {@link #setValue(int, int, double)}
  * </p><p>
  * A good convention to follow is to use <code>row=1;row<=rows();row++(col=1;col<=cols();coll++)</code>  as indices while looping over matrix elements.
  * </p><p>
@@ -35,30 +35,32 @@ public interface Matrix extends java.io.Serializable {
     // GETS AND SETS
     /**
      * Sets an element at the given position to a new value
+     * <br>May throw an UnsupportedOperationException in case the object is immutable</br>
+     * <br>May throw IndexOutOfBoundsException or IllegalArgumentException if index bounds are violated</br>
      *
      * @param row   row in which the element occurs
      * @param col   column in which the element occurs
      * @param value the new value to be set
      */
-    void set(int row, int col, double value);
+    void setValue(int row, int col, double value);
 
     /**
      * Gets the value of the element at the given row and column
+     * <br>May throw IndexOutOfBoundsException or IllegalArgumentException if index bounds are violated</br>
      *
      * @param row row in which the element occurs
      * @param col column in which the element occurs
      * @return value of the element
      */
-    double get(int row, int col);
+    double getValue(int row, int col);
 
-    //todo should we return arrays or matrices?  we don't have to return arrays as get returns the store array perhaps we should move these to transformer package!!!
     /**
      * Gets the entire row as a matrix
      *
      * @param row row asked for
      * @return Matrix containing the row
      */
-    Matrix getRow(int row);
+    Matrix getRowMatrix(int row);
 
     /**
      * Gets the entire column as a matrix
@@ -66,7 +68,7 @@ public interface Matrix extends java.io.Serializable {
      * @param col column asked for
      * @return Matrix containing the column
      */
-    Matrix getColumn(int col);
+    Matrix getColumnMatrix(int col);
 
     /**
      * Gets a <strong>copy</strong> of the elements as a 2D array.
@@ -75,7 +77,7 @@ public interface Matrix extends java.io.Serializable {
      *
      * @return copy of all elements as a 2D array
      */
-    double[][] get();
+    double[][] getValues();
 
     //COPY
 
@@ -94,7 +96,7 @@ public interface Matrix extends java.io.Serializable {
      * @throws ArrayIndexOutOfBoundsException Submatrix indices
      */
 
-    public Matrix getSubMatrix(int rowI, int colI, int rowF, int colF);
+    Matrix getSubMatrix(int rowI, int colI, int rowF, int colF);
 
     /**
      * Get a submatrix.
@@ -105,7 +107,7 @@ public interface Matrix extends java.io.Serializable {
      * @throws ArrayIndexOutOfBoundsException Submatrix indices
      */
 
-    public Matrix getSubMatrix(int[] r, int[] c);
+    Matrix getSubMatrix(int[] r, int[] c);
 
     /**
      * Get a submatrix.

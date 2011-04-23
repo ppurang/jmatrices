@@ -1,4 +1,4 @@
-package org.jmatrices.dbl.client;
+package org.jmatrices.dbl.syntax;
 
 /**
  * GaussSyntax  todo

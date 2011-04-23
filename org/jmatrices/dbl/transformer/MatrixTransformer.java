@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * MatrixTransformer is responsible for classical non element-by-element transformer of a matrix
+ * MatrixTransformer is responsible for classical non element-by-element transformation of a matrix
  * <p/>
  * Captures classical transformations that aren't applicable in an element-by-element way (only exception is {@link #negate(org.jmatrices.dbl.Matrix)} )
  * <p/>
@@ -53,7 +53,7 @@ public final class MatrixTransformer {
         Matrix transposed = MatrixFactory.getMatrix(cols, rows, m);
         for (int row = 1; row <= rows; row++) {
             for (int col = 1; col <= cols; col++) {
-                transposed.set(col, row, m.get(row, col));
+                transposed.setValue(col, row, m.getValue(row, col));
             }
         }
         return transposed;
@@ -95,7 +95,7 @@ public final class MatrixTransformer {
             for (int row = 1; row <= rows; row++) {
                 for (int col = 1; col <= cols; col++) {
                     if (row == col)
-                        diagonal.set(row, 1, m.get(row, col));
+                        diagonal.setValue(row, 1, m.getValue(row, col));
                 }
             }
         }
@@ -124,11 +124,11 @@ public final class MatrixTransformer {
                         Matrix dm = MatrixFactory.getMatrix(d, d, m);
                         if (offset > 0) {
                             for (int row = 1; row <= MatrixMeasure.length(m); row++) {
-                                dm.set(row, row + offset, m.get(row, 1));
+                                dm.setValue(row, row + offset, m.getValue(row, 1));
                             }
                         } else {
                             for (int row = 1; row <= MatrixMeasure.length(m); row++) {
-                                dm.set(row + Math.abs(offset), row, m.get(row, 1));
+                                dm.setValue(row + Math.abs(offset), row, m.getValue(row, 1));
                             }
                         }
                         return dm;
@@ -156,8 +156,8 @@ public final class MatrixTransformer {
                 for (int row = 1; row <= length - offset; row++) {
                     //System.out.println("Trying to access" + row+","+ (row + offset));
                     if (row <= m.rows() && row + offset <= m.cols())  {
-                       //System.out.println("Adding "+m.get(row, row + offset));
-                       list.add(new Double(m.get(row, row + offset)));
+                       //System.out.println("Adding "+m.getValue(row, row + offset));
+                       list.add(new Double(m.getValue(row, row + offset)));
                     }
                 }
                 return MatrixFactory.getMatrix(list,m);
@@ -170,8 +170,8 @@ public final class MatrixTransformer {
                 for (int row = 1; row <= length + offset; row++) {
                     //System.out.println("Trying to access" + (row + Math.abs(offset)) +","+ row);
                     if (row + Math.abs(offset) <= m.rows() && row <= m.cols()) {
-                        //System.out.println("Adding "+m.get(row + Math.abs(offset), row));
-                        list.add(new Double(m.get(row + Math.abs(offset), row)));
+                        //System.out.println("Adding "+m.getValue(row + Math.abs(offset), row));
+                        list.add(new Double(m.getValue(row + Math.abs(offset), row)));
                     }
                 }
                 return MatrixFactory.getMatrix(list, m);
@@ -193,7 +193,7 @@ public final class MatrixTransformer {
         for (int row = 1; row <= MatrixMeasure.length(m) - Math.abs(offset); row++) {
             for (int col = row + Math.abs(offset); col <= MatrixMeasure.length(m); col++) {
                 if (row <= rows && col <= cols)
-                    ut.set(row, col, m.get(row, col));
+                    ut.setValue(row, col, m.getValue(row, col));
             }
         }
 
@@ -201,7 +201,7 @@ public final class MatrixTransformer {
             for (int row = 1; row <= m.rows(); row++) {
                 for (int col = Math.max(1, row + offset); col <= Math.min(MatrixMeasure.length(m), row - offset - 1); col++) {
                     if (row <= rows && col <= cols)
-                        ut.set(row, col, m.get(row, col));
+                        ut.setValue(row, col, m.getValue(row, col));
                 }
             }
 
@@ -280,9 +280,9 @@ public final class MatrixTransformer {
        for(int row=1; row<=m.rows();row++){
            for(int col=1; col<=m.cols(); col++){
                if(row==1)
-                result.set(row,col,m.get(row,col));
+                result.setValue(row,col,m.getValue(row,col));
                else
-               result.set(row,col,result.get(row-1,col)*m.get(row,col));
+               result.setValue(row,col,result.getValue(row-1,col)*m.getValue(row,col));
            }
        }
         return result;
@@ -309,9 +309,9 @@ public final class MatrixTransformer {
        for(int row=1; row<=m.rows();row++){
            for(int col=1; col<=m.cols(); col++){
                if(row==1)
-                result.set(row,col,m.get(row,col));
+                result.setValue(row,col,m.getValue(row,col));
                else
-               result.set(row,col,result.get(row-1,col)+m.get(row,col));
+               result.setValue(row,col,result.getValue(row-1,col)+m.getValue(row,col));
            }
        }
         return result;

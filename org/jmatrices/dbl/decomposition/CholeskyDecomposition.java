@@ -75,7 +75,7 @@ public class CholeskyDecomposition {
     public CholeskyDecomposition(Matrix matrix) {
         hint = matrix;
         // Initialize.
-        double[][] A = matrix.get();
+        double[][] A = matrix.getValues();
         n = matrix.rows();
         L = new double[n][n];
         isspd = (matrix.cols() == n);
@@ -206,7 +206,7 @@ public class CholeskyDecomposition {
         }
 
         // Copy right hand side.
-        double[][] X = B.get();
+        double[][] X = B.getValues();
         int nx = B.cols();
 
         // Solve L*Y = B;

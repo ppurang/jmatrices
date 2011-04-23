@@ -74,7 +74,7 @@ public class LUDecomposition {
         hint = a;
         // Use a "left-looking", dot-product, Crout/Doolittle algorithm.
 
-        LU = a.get();     //changed
+        LU = a.getValues();     //changed
         m = a.rows();
         n = a.cols();
         piv = new int[m];
@@ -284,7 +284,7 @@ public class LUDecomposition {
         int nx = B.cols();
         Matrix Xmat = B.getSubMatrix(piv, 0 + 1, nx - 1 + 1);//changed to reflect indices from 1,1   //piv must have indices begining from 1
         //Matrix Xmat = B.getSubMatrix(getAdjustedPivot(),0+1,nx-1+1);//if we wouldn't have changed piv earlier we could have done that in a method named adjustedPivot .. I tested it and it was working!
-        double[][] X = Xmat.get();
+        double[][] X = Xmat.getValues();
 
         // Solve L*Y = B(piv,:)
         for (int k = 0; k < n; k++) {

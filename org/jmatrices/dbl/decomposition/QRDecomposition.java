@@ -72,7 +72,7 @@ public class QRDecomposition {
     public QRDecomposition(Matrix matrix) {
         hint = matrix;
         // Initialize.
-        QR = matrix.get();        //changed
+        QR = matrix.getValues();        //changed
         m = matrix.rows(); //changed
         n = matrix.cols();  //changed
         Rdiag = new double[n];
@@ -219,7 +219,7 @@ public class QRDecomposition {
 
         // Copy right hand side
         int nx = B.cols();
-        double[][] X = B.get();        //changed
+        double[][] X = B.getValues();        //changed
 
         // Compute Y = transpose(Q)*B
         for (int k = 0; k < n; k++) {

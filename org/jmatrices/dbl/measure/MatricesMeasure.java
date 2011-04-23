@@ -27,7 +27,7 @@ public final class MatricesMeasure {
         if (areSameDimension(a, b)) {
             for (int row = 1; row <= a.rows(); row++) {
                 for (int col = 1; col <= a.cols(); col++) {
-                    if (a.get(row, col) != b.get(row, col))
+                    if (a.getValue(row, col) != b.getValue(row, col))
                         return false;
                 }
             }
@@ -64,7 +64,9 @@ public final class MatricesMeasure {
             throw new IllegalArgumentException("Matrices don't conform");
     }
 
-
+    private MatricesMeasure() {
+        
+    }
 }
 
 
