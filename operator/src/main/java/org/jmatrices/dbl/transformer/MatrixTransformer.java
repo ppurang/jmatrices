@@ -1,13 +1,14 @@
 package org.jmatrices.dbl.transformer;
 
+import org.jmatrices.dbl.Matrices;
 import org.jmatrices.dbl.Matrix;
 import org.jmatrices.dbl.MatrixFactory;
-import org.jmatrices.dbl.Matrices;
 import org.jmatrices.dbl.measure.MatrixMeasure;
 import org.jmatrices.dbl.measure.MatrixProperty;
 import org.jmatrices.dbl.operator.MatrixOperator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MatrixTransformer is responsible for classical non element-by-element transformation of a matrix
@@ -154,12 +155,12 @@ public final class MatrixTransformer {
             if (offset > 0) {
                 System.out.println("offset > 0");
                 //Matrix cv = MatrixFactory.getMatrix(length-offset,1);
-                ArrayList list = new ArrayList(10);
+                List<Double> list = new ArrayList<Double>(10);
                 for (int row = 1; row <= length - offset; row++) {
                     //System.out.println("Trying to access" + row+","+ (row + offset));
                     if (row <= m.rows() && row + offset <= m.cols())  {
                        //System.out.println("Adding "+m.getValue(row, row + offset));
-                       list.add(new Double(m.getValue(row, row + offset)));
+                       list.add(Double.valueOf(m.getValue(row, row + offset)));
                     }
                 }
                 return Matrices.getColumnMatrixFromList(m,list);
@@ -168,12 +169,12 @@ public final class MatrixTransformer {
                     throw new IllegalArgumentException("Length of the matrix and offset combine to yield illegal matrix indices");
                     //return MatrixFactory.getEmptyMatrix();
                 //Matrix cv = MatrixFactory.getMatrix(length + offset, 1);
-                ArrayList list = new ArrayList(10);
+                List<Double> list = new ArrayList<Double>(10);
                 for (int row = 1; row <= length + offset; row++) {
                     //System.out.println("Trying to access" + (row + Math.abs(offset)) +","+ row);
                     if (row + Math.abs(offset) <= m.rows() && row <= m.cols()) {
                         //System.out.println("Adding "+m.getValue(row + Math.abs(offset), row));
-                        list.add(new Double(m.getValue(row + Math.abs(offset), row)));
+                        list.add(Double.valueOf(m.getValue(row + Math.abs(offset), row)));
                     }
                 }
                 return Matrices.getColumnMatrixFromList(m,list);

@@ -134,7 +134,7 @@ public class MatrixDatabaseConnection implements Serializable {
         private static Connection con;
         private static String url = "jdbc:postgresql://127.0.0.1:5432/";
         private static String user = "ppurang";
-        private static String pass = "piyday99";
+        private static String pass = "";
 
         public static Connection getConnection(String database, String user, String password) throws ClassNotFoundException, SQLException {
             if (con != null)
