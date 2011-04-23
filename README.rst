@@ -1,5 +1,5 @@
 ==================================
-jMatrices
+|icon|
 ==================================
 
 JMarices is a matrix library in Java that grew from the inability of satisfactorily 
@@ -19,13 +19,14 @@ The web-pages can be found on jmatrices_ at sourceforge.
 TODOs
 ======
 
-1. icon in README
-2. sbtfy the build
-3. specifications
-4. Modify source forge to show fork me on github
+1. sbtfy the build
+2. specifications
+3. Modify source forge to show fork me on github
 
 .. _bitbucket: https://bitbucket.org/ppurang/jmatrices
 .. _JAMA: http://math.nist.gov/javanumerics/jama/
 .. _jmatrices: http://jmatrices.sf.net
 
+.. |icon| image:: http://jmatrices.sourceforge.net/imgs/logo.jpg
+              :alt: jMatrices
 
