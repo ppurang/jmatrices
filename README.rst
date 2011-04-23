@@ -19,9 +19,8 @@ The web-pages can be found on jmatrices_ at sourceforge.
 TODOs
 ======
 
-1. sbtfy the build
-2. specifications
-3. Modify source forge to show fork me on github
+1. specifications
+2. Modify source forge to show fork me on github
 
 .. _bitbucket: https://bitbucket.org/ppurang/jmatrices
 .. _JAMA: http://math.nist.gov/javanumerics/jama/
