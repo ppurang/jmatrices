@@ -20,31 +20,35 @@ class JMatrices(info: ProjectInfo) extends DefaultProject(info) {
   lazy val database  = project("database", "database", new Database(_), core)
   lazy val scripting  = project("scripting", "scripting", new Scripting(_), syntax)
 
-  class Core(info: ProjectInfo) extends DefaultProject(info) {
+  class Core(info: ProjectInfo) extends DefaultProject(info) with Dependencies {
   }
 
-  class Decompose(info: ProjectInfo) extends DefaultProject(info) {
+  class Decompose(info: ProjectInfo) extends DefaultProject(info) with Dependencies  {
   }
 
-  class Operator(info: ProjectInfo) extends DefaultProject(info) {
+  class Operator(info: ProjectInfo) extends DefaultProject(info) with Dependencies  {
   }
 
-  class Builder(info: ProjectInfo) extends DefaultProject(info)  with Dependencies{
+  class Builder(info: ProjectInfo) extends DefaultProject(info) with Dependencies {
+    val jdom = "org.jdom" % "jdom" % "1.1" withSources()
   }
 
-  class Syntax(info: ProjectInfo) extends DefaultProject(info) {
+  class Syntax(info: ProjectInfo) extends DefaultProject(info) with Dependencies {
   }
 
   class Database(info: ProjectInfo) extends DefaultProject(info) with Dependencies {
   }
 
   class Scripting(info: ProjectInfo) extends DefaultProject(info) with Dependencies {
+    val rhino = "rhino"  % "js" % "1.7R1" withSources()
   }
 
   trait Dependencies  {
-    val jdom = "org.jdom" % "jdom" % "1.1" withSources()
-    val rhino = "rhino"  % "js" % "1.7R1" withSources()
+    import sbt._
     val scalatest = "org.scalatest" % "scalatest" % "1.3" % "test" withSources()
+    val testng = "org.testng" % "testng" % "6.0.1"
+    val  anotherOne = "Scala Tools Repository" at
+    "http://nexus.scala-tools.org/content/repositories/snapshots/"
     val scalaToolsRepo = "scala tools repo" at "http://www.scala-tools.org/repo-releases"
     val javaNetRepo = "Java.net Repository for Maven" at "http://download.java.net/maven/2"
     val newReleaseToolsRepository = ScalaToolsSnapshots
