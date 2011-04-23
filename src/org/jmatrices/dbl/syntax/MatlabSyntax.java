@@ -3,7 +3,6 @@ package org.jmatrices.dbl.syntax;
 import org.jmatrices.dbl.Matrix;
 import org.jmatrices.dbl.MatrixFactory;
 import org.jmatrices.dbl.build.MatrixBuilder;
-import org.jmatrices.dbl.build.MatrixBuilder;
 import org.jmatrices.dbl.decomposition.*;
 import org.jmatrices.dbl.measure.MatricesMeasure;
 import org.jmatrices.dbl.measure.MatrixMeasure;
@@ -20,7 +19,7 @@ import java.util.Iterator;
 /**
  * MatlabSyntax
  * todo there exist many refernces to classes in arraybaseddecomp chnage them!
- * <p>Author: purangp</p>
+ * <p>@author ppurang</p>
  * Date: 30.04.2004
  * Time: 14:49:39
  */
@@ -61,13 +60,16 @@ public final class MatlabSyntax {
     }
 
     public static Matrix eye(int rows, int cols) {
-        if (rows == cols)
+        if (rows == cols) {
             return MatrixFactory.getIdentityMatrix(rows);
+        }
         boolean rowsAreBigger = (rows > cols);     //vertical concatenation
-        if (rowsAreBigger)
+        if (rowsAreBigger) {
             return MatrixOperator.verticalConcatenation(MatrixFactory.getIdentityMatrix(cols), MatrixFactory.getMatrix(rows - cols, cols, null));
-        else
+        }
+        else {
             return MatrixOperator.horizontalConcatenation(MatrixFactory.getIdentityMatrix(rows), MatrixFactory.getMatrix(rows, cols - rows, null));
+        }
     }
 
     /**

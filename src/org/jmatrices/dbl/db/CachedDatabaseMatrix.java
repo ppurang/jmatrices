@@ -6,7 +6,7 @@ import org.jmatrices.dbl.db.cache.WriteCache;
 
 /**
  * DatabaseMatrix
- * <br>Author: purangp</br>
+ * <br>@author ppurang</br>
  * <br>
  * Date: 10.06.2004
  * Time: 23:18:43
@@ -106,7 +106,7 @@ public class CachedDatabaseMatrix extends DatabaseMatrix {
         writeCache = null;
     }
 
-    protected Matrix createClone() {
+    protected Matrix createNascentClone() {
         return new CachedDatabaseMatrix(rows(),cols());
     }
 }

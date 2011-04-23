@@ -5,12 +5,12 @@ import org.jmatrices.dbl.Matrix;
 /**
  * Util
  * <br/>
- * Author: purangp
+ * @author ppurang
  * <br/>
  * Date: 13.03.2004
  * Time: 13:54:46
  */
-public final class Util {
+public final strictfp class Util {
     
     public static double hypot(double a, double b) {
         double r;
@@ -62,14 +62,38 @@ public final class Util {
         return 0;
     }
 
-    static boolean isSymmetric(Matrix a) {
+    public static boolean isSymmetric(final Matrix a) {
         boolean symmetric = true;
-        if (a.rows() != a.cols()) {
+        final int aRows = a.rows();
+        final int aCols = a.cols();
+        if (aRows != aCols) {
             symmetric = false;
         } else {
             twoloops:
-            for (int row = 0; row <= a.rows(); row++) {
-                for (int col = 0; col <= a.cols(); col++) {
+            for (int row = 1; row < aRows; row++) {
+                for (int col = 1; col < aCols; col++) {
+                    if (a.getValue(row, col) == a.getValue(col, row)) {
+                        continue;
+                    } else {
+                        symmetric = false;
+                        break twoloops;
+                    }
+                }
+            }
+        }
+        return symmetric;
+    }
+
+    public static boolean isSymmetric(final MatrixAdaptor a) {
+        boolean symmetric = true;
+        final int aRows = a.rows();
+        final int aCols = a.cols();
+        if (aRows != aCols) {
+            symmetric = false;
+        } else {
+            twoloops:
+            for (int row = 0; row <= aRows; row++) {
+                for (int col = 0; col <= aCols; col++) {
                     if (a.getValue(row, col) == a.getValue(col, row)) {
                         continue;
                     } else {

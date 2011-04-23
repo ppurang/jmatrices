@@ -22,12 +22,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Matrices plays the same role that Collections does for collection classes
- * <br>Author: purangp</br>
- * <br>
- * Date: 18.05.2004
- * Time: 19:21:00
- * </br>
+ * Matrices plays the same role that {@link java.util.Collections} does for collection classes.
+ * @author ppurang
+ * created  18.05.2004 - 19:21:00
  */
 public final class Matrices {
     /**
@@ -218,7 +215,7 @@ public final class Matrices {
         Matrix toReturn = MatrixFactory.getMatrix(n, n1, hint);
         for (int i = 0; i < elems.length; i++) {
             for (int j = 0; j < elems[i].length; j++) {
-                double elem = elems[j][j];
+                double elem = elems[i][j];
                 toReturn.setValue(i + 1, j + 1, elem);
             }
         }

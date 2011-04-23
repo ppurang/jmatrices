@@ -15,17 +15,24 @@ import org.jmatrices.dbl.transformer.MatrixTransformer;
  * All operations on a matrix fitting this pattern can be found here!
  * </p>
  * <p>
- * Author: purangp
- * </p>
- * Date: 08.03.2004
- * Time: 23:15:14
+ * @author ppurang
+ * Created - 08.03.2004 23:15:14
  */
 public final class MatrixProperty {
+    /**
+     * Determines whether or not a matrix contains only a single element
+     *
+     * @param m matrix
+     * @return true iff m has only one column and one row
+     */
+    public static boolean isSingleElementMatrix(final Matrix m) {
+        return isColumnVector(m) && isRowVector(m);
+    }
 
     /**
      * Determines whether or not a matrix is a Column Vector
      *
-     * @param m
+     * @param m matrix
      * @return true iff m has only one column
      */
     public static boolean isColumnVector(final Matrix m) {
@@ -35,7 +42,7 @@ public final class MatrixProperty {
     /**
      * Determines whether or not a matrix is a Row Vector
      *
-     * @param m
+     * @param m matrix
      * @return true iff m has only one row
      */
     public static boolean isRowVector(final Matrix m) {
@@ -45,17 +52,17 @@ public final class MatrixProperty {
      /**
      * Determines whether or not a matrix is a Row or a Column Vector
      *
-     * @param m
+     * @param m matrox
      * @return true iff m has only one row
      */
     public static boolean isVector(final Matrix m) {
-        return (m.cols() ==1 || m.rows() == 1);
+        return (m.cols() == 1 || m.rows() == 1);
     }
 
     /**
      * Determines whether or not a matrix is a <strong>square</strong> matrix.
      *
-     * @param m
+     * @param m matrix
      * @return true iff m has as many columns as it has rows
      */
     public static boolean isSquare(final Matrix m) {
@@ -65,7 +72,7 @@ public final class MatrixProperty {
     /**
      * Determines whether or not a matrix is <strong>Symmetric</strong>
      *
-     * @param m
+     * @param m matrix
      * @return true iff A' = A
      */
     public static boolean isSymmetric(final Matrix m) {
@@ -75,7 +82,7 @@ public final class MatrixProperty {
     /**
      * Determines whether or not a matrix is <strong>SkewSymmetric</strong>
      *
-     * @param m
+     * @param m matrix
      * @return true if A' = -A
      */
     public static boolean isSkewSymmetric(final Matrix m) {
@@ -85,18 +92,20 @@ public final class MatrixProperty {
     /**
      * Determines whether or not a matrix is <strong>Idempotent</strong>
      *
-     * @param m
+     * @param m matrix
      * @return true if A = AA = AAA = AAAA...  or A = A<sup>2</sup> = A<sup>3</sup>= A<sup>4</sup> ..
      */
     public static boolean isIdempotent(final Matrix m) {
         return MatricesMeasure.areEqual(m, MatrixTransformer.pow(m, 2));
     }
 
-    //magic square - a square matrix of n rows and columns; the first n-squared integers are arranged in the cells of the matrix is such a way that the sum of any row or column or diagonal is the same
+    //magic square - a square matrix of n rows and columns;
+    // the first n-squared integers are arranged in the cells of the matrix is such a way that the
+    // sum of any row or column or diagonal is the same
     /**
-     * <font color="blue">todo implement</font>
+     * todo implement
      *
-     * @param m
+     * @param m matrix
      * @return
      */
     public static boolean isMagicSquare(final Matrix m) {
@@ -125,13 +134,15 @@ public final class MatrixProperty {
         if (isSquare(m)) {
             for (int row = 1; row <= m.rows(); row++) {
                 for (int col = 1; col <= m.cols(); col++) {
-                    if (row != col && m.getValue(row, col) != 0)
+                    if (row != col && m.getValue(row, col) != 0) {
                         return false;
+                    }
                 }
             }
             return true;
-        } else
+        } else {
             return false;
+        }
     }
 
     /**
@@ -157,7 +168,7 @@ public final class MatrixProperty {
     /**
      * Determines whether or not a matrix is upper triangular in form
      *
-     * @param m
+     * @param m matrix
      * @return true if matrix is upper triangular in form
      */
     public static boolean isUpperTriangular(final Matrix m) {
@@ -167,7 +178,7 @@ public final class MatrixProperty {
     /**
      * Determines whether or not a matrix is lower triangular in form
      *
-     * @param m
+     * @param m matrix
      * @return true if matrix is lower triangular in form
      */
     public static boolean isLowerTriangular(final Matrix m) {
@@ -192,8 +203,9 @@ public final class MatrixProperty {
         if (isSquare(m)) {
             for (int row = 1; row <= m.rows(); row++) {
                 for (int col = 1; col <= m.cols(); col++) {
-                    if (row != col && m.getValue(row, col) != 0)
+                    if (row != col && m.getValue(row, col) != 0) {
                         return false;
+                    }
                     else if (row == col) {
                         if (firstIter) {
                             tmp = m.getValue(row, col);
@@ -206,8 +218,9 @@ public final class MatrixProperty {
                 }
             }
             return true;
-        } else
+        } else {
             return false;
+        }
     }
 
 
@@ -219,7 +232,7 @@ public final class MatrixProperty {
     /**
      * <font color="blue">todo implement</font>
      *
-     * @param m
+     * @param m matrix
      * @return
      */
     public static boolean isDefinitePositive(final Matrix m) {
@@ -229,8 +242,8 @@ public final class MatrixProperty {
     /**
      * <font color="blue">todo implement</font>
      *
-     * @param m
-     * @return
+     * @param m matrix
+     * @return  true iff the matris is semi definite positive
      */
     public static boolean isSemiDefinitePositive(final Matrix m) {
         throw new UnsupportedOperationException("to be implemented");
@@ -238,11 +251,11 @@ public final class MatrixProperty {
 
     /**
      * <font color="blue">todo implement</font>
-     */
     public class MatrixBandwidth {
         //check
         //http://www.cs.ut.ee/~toomas_l/linalg/lin1/node13.html
     }
+     */
 
     private MatrixProperty() {
     }

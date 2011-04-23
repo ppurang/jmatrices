@@ -20,15 +20,14 @@ package org.jmatrices.dbl.decomposition;
 
 import org.jmatrices.dbl.Matrix;
 import org.jmatrices.dbl.MatrixFactory;
-import org.jmatrices.dbl.decomposition.Util;
 
 /**
  * QR
  *
- * @author purangp
+ * @author ppurang
  *         Created 07.02.2005 - 01:58:00
  */
-public class QR {
+public final strictfp class QR {
 
     /* ------------------------
    Class variables
@@ -70,7 +69,7 @@ public class QR {
 
     public QR(Matrix matrix) {
         // Initialize.
-        QR = new MatrixAdaptor(MatrixFactory.getMatrixClone(matrix));        //changed
+        QR = new MatrixAdaptor(MatrixFactory.getMutableMatrixClone(matrix));        //changed
         m = matrix.rows(); //changed
         n = matrix.cols();  //changed
         Rdiag = new MatrixAdaptor(MatrixFactory.getMatrix(n, 1, matrix));

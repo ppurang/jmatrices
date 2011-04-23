@@ -20,7 +20,7 @@ package org.jmatrices.dbl.operator;
  * </p>
  * Check out the "See Also" list to find some more methods that use this method
  * <p>
- * Author: purangp
+ * @author ppurang
  * </p>
  * Date: 07.03.2004
  * Time: 19:17:46

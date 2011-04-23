@@ -18,7 +18,7 @@ import org.jmatrices.dbl.transformer.MatrixEBETransformer;
  * All operations on a matrix fitting this pattern can be found here!
  * </p>
  * <p/>
- * @author purangp
+ * @author ppurang
  * </p>
  * Date: 07.03.2004
  * Time: 18:09:51

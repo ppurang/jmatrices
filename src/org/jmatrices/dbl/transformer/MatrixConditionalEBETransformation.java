@@ -23,7 +23,7 @@ package org.jmatrices.dbl.transformer;
  * </pre>
  * </p>
  * <p>
- * Author: purangp
+ * @author ppurang
  * </p>
  * Date: 12.03.2004
  * Time: 20:20:20

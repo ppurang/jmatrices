@@ -51,7 +51,7 @@ package org.jmatrices.dbl.transformer;
  * replacing the method here with the one in MatrixConditionalEBETransformation
  * </font>
  * <p>
- * Author: purangp
+ * @author ppurang
  * </p>
  * Date: 07.03.2004
  * Time: 15:54:31

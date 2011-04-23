@@ -1,12 +1,11 @@
 package org.jmatrices.dbl.db;
 
-import org.doomdark.uuid.UUIDGenerator;
-
 import java.sql.*;
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
- * MatrixDatabaseConnection <br>Author: purangp</br> <br> Date: 25.06.2004 Time: 20:37:41 </br>
+ * MatrixDatabaseConnection <br>@author ppurang</br> <br> Date: 25.06.2004 Time: 20:37:41 </br>
  */
 public class MatrixDatabaseConnection implements Serializable {
 
@@ -22,7 +21,7 @@ public class MatrixDatabaseConnection implements Serializable {
 
     private MatrixDatabaseConnection() throws SQLException, ClassNotFoundException {
         //Setup the connection
-        sqlConnection  = DBUtility.getConnection("matrixdb","purangp","none");
+        sqlConnection  = DBUtility.getConnection("matrixdb","ppurang","none");
         stmt = sqlConnection.createStatement();
     }
 
@@ -41,7 +40,7 @@ public class MatrixDatabaseConnection implements Serializable {
     }
 
     public static String generateUUIDString() {
-        return UUIDGenerator.getInstance().generateRandomBasedUUID().toString();
+        return UUID.randomUUID().toString();
     }
 
     public void removeValue(String uuid, int row, int col) throws SQLException {

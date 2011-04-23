@@ -23,7 +23,7 @@ import java.text.DecimalFormat;
 /**
  * MatrixFormatter is used for formatting Matrix into required string representations.
  *
- * @author purangp
+ * @author ppurang
  *         Created 16.10.2004 - 23:46:12
  */
 public class MatrixFormatter {
@@ -50,7 +50,7 @@ public class MatrixFormatter {
      * @return String representation of the matrix formatted as per reqirements.
      */
     public static String formatMatrix (Matrix m, DecimalFormat decimalFormat, String rowSeperator, String colSeperator) {
-        StringBuffer matrix = new StringBuffer(m.rows()*m.cols()*decimalFormat.getMaximumIntegerDigits()*decimalFormat.getMaximumFractionDigits());
+        StringBuffer matrix = new StringBuffer(m.rows()*m.cols());
         try {
             for (int row = 1; row <= m.rows(); row++) {
                 for (int col = 1; col <= m.cols(); col++) {

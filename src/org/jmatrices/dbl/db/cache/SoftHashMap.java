@@ -9,7 +9,7 @@ import java.lang.ref.Reference;
 /**
  * SoftHashMap
  *
- * @author purangp
+ * @author ppurang
  *         Created 21.11.2004 - 21:20:57
  */
 public class SoftHashMap extends AbstractMap implements Serializable {

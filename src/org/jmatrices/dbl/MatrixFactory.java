@@ -18,23 +18,33 @@
  */
 package org.jmatrices.dbl;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Collections;
 
 /**
- * MatrixFactory
- * remark: MatrixFactory has been split up into two classes
+ * MatrixFactory is a factory for creating matrix objects through static factory methods.
+ * <p/>
+ * As a singleton object it is also responsible for implementing the infrastructure for
+ * coming up with valid implementation of result matrices. For this functionality it also relies on
+ * {@link org.jmatrices.dbl.MutableMatrixProducer} and {@link org.jmatrices.dbl.MatrixSelectionStrategy}
+ * <p/>
+ * remark: MatrixFactory has been split up into two classes MtarixFactory and MatrixBuilder which
+ * is now part of the builder component. 
+ * <p/>
  * remark: MatrixFactory is now a singelton and allows better mechanism for producing matrices.
+ * By default it relies on the {@link org.jmatrices.dbl.PropertiesFileMatrixSelectionStrategy}.
+ * Users can provide alternate strategies by providing a value for the
+ * property {@link #MATRIX_SELECTION_STRATEGY_SYSTEM_PROP}.
  *
- * @author purangp
+ * @author ppurang
  *         Created 13.12.2004 - 22:26:12
  */
-public class MatrixFactory {
+public final class MatrixFactory {
     public static final String MATRIX_SELECTION_STRATEGY_DEFAULT_CLASS_NAME = "org.jmatrices.dbl.PropertiesFileMatrixSelectionStrategy";
     public static final String MATRIX_SELECTION_STRATEGY_SYSTEM_PROP = "matrix.selection.strategy.default.class";
     private static final MatrixFactory factory = new MatrixFactory();
-    private MatrixSelectionStrategy default_strategy;
+    private MatrixSelectionStrategy defaultStrategy;
     private Map mutableMatrixProducers = new HashMap();
 
     //various matrix implementations
@@ -80,8 +90,7 @@ public class MatrixFactory {
         return getScalarMatrix(dim, 1);
     }
 
-    //matrix clone
-    private static Matrix getMatrixCloneNotSupported(Matrix m) {
+    public static Matrix getMutableMatrixClone(Matrix m) {
         Matrix toReturn = MatrixFactory.getMatrix(m.rows(), m.cols(), m);
         for (int row = 1; row <= m.rows(); row++)
             for (int col = 1; col <= m.cols(); col++)
@@ -89,12 +98,22 @@ public class MatrixFactory {
         return toReturn;
     }
 
+    /**
+     * Gets the clone (deep copy) of the matrix if possible.
+     * <p/>
+     * Note: If the matrix being cloned is immutable or partially immutable then
+     * the object returned has the same characteristics.
+     * So don't rely on this method if you want to modify the clone.
+     *
+     * @param m matrix whos clone is required.
+     * @return a cloned matrix with the same characteristics as the matrix cloned.
+     */
     public static Matrix getMatrixClone(Matrix m) {
         Matrix clone = null;
         try {
             clone = (Matrix) m.clone();
         } catch (CloneNotSupportedException e) {
-            clone = getMatrixCloneNotSupported(m);
+            clone = getMutableMatrixClone(m);
         }
         return clone;
     }
@@ -110,7 +129,7 @@ public class MatrixFactory {
      * @return Matrix of the given dimensions
      */
     public static Matrix getMatrix(int rows, int cols, Matrix hint) {
-        return getMatrix(rows, cols, hint, getInstance().default_strategy);
+        return getMatrix(rows, cols, hint, getInstance().defaultStrategy);
     }
 
     public static Matrix getMatrix(int rows, int cols, Matrix hint, MatrixSelectionStrategy strategy) {
@@ -118,15 +137,18 @@ public class MatrixFactory {
     }
 
     public static Matrix getMatrix(int rows, int cols, Matrix a, Matrix b) {
-        return getMatrix(rows, cols, a, b, getInstance().default_strategy);
+        return getMatrix(rows, cols, a, b, getInstance().defaultStrategy);
     }
 
     /**
      * Gets a matrix of the asked dimensions.
      * All elements are setValue to 0.0
      *
-     * @param rows number of rows in the matrix (>= 1)
-     * @param cols number of columns in the matrix (>= 1)
+     * @param rows     number of rows in the matrix (>= 1)
+     * @param cols     number of columns in the matrix (>= 1)
+     * @param a        first matrix
+     * @param b        second matrix
+     * @param strategy strategy object for decision making support
      * @return Matrix of the given dimensions
      */
     public static Matrix getMatrix(int rows, int cols, Matrix a, Matrix b, MatrixSelectionStrategy strategy) {
@@ -136,7 +158,6 @@ public class MatrixFactory {
     /**
      * Singelton instance getter
      * <p/>
-     * todo have a getInstance(selection strategy) ?
      *
      * @return the one-and-only instance.
      */
@@ -145,12 +166,27 @@ public class MatrixFactory {
     }
 
     /**
+     * Singelton instance that changes the startegy object used and then returns the singelton.
+     *
+     * @throws IllegalArgumentException if the <code>aSelectionStrategy</code> is null
+     * @return the one-and-only instance.
+     */
+    public static MatrixFactory getInstance(MatrixSelectionStrategy aSelectionStrategy) {
+        if(aSelectionStrategy != null) {
+            factory.defaultStrategy = aSelectionStrategy;
+        } else {
+            throw new IllegalArgumentException("The provided MatrixSelectionStrategy object can't be null");
+        }
+        return factory;
+    }
+
+
+    /**
      * Private constructor as it is a singelton and utility class
      */
     private MatrixFactory() {
-        //todo initialize default strategy
         String className = System.getProperty(MATRIX_SELECTION_STRATEGY_SYSTEM_PROP);
-        if (className != null) {
+        if (className != null && className.trim().length() > 0) {
             initializeDefaultStrategy(className);
         } else {
             initializeDefaultStrategy(MATRIX_SELECTION_STRATEGY_DEFAULT_CLASS_NAME);
@@ -160,7 +196,7 @@ public class MatrixFactory {
     private void initializeDefaultStrategy(String className) {
         try {
             Class clazz = Class.forName(className);
-            default_strategy = (MatrixSelectionStrategy) clazz.newInstance();
+            defaultStrategy = (MatrixSelectionStrategy) clazz.newInstance();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Wrapped a ClassNotFoundException in RuntimeException", e);
         } catch (InstantiationException e) {
@@ -186,16 +222,19 @@ public class MatrixFactory {
 
     /**
      * Gets the MatrixProducer for the passed matrixType.
+     * <p/>
+     * Returns a null to signify that a producer wasn't found which in turn implies
+     * that maybe the matrix class specified by <code>matrixClassName</code> isn't mutable.
      *
      * @param matrixClassName type of matrices created by the sought after producer
      * @return producer or null.
      */
     public MutableMatrixProducer getProducer(String matrixClassName) {
         MutableMatrixProducer producer = (MutableMatrixProducer) mutableMatrixProducers.get(matrixClassName);
-        if ( producer == null) {
+        if (producer == null) {
             //give it a chance toregister
             try {
-                Class.forName(matrixClassName,true,Thread.currentThread().getContextClassLoader());
+                Class.forName(matrixClassName, true, Thread.currentThread().getContextClassLoader());
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException("Wrapped a ClassNotFoundException", e);
             }
@@ -205,7 +244,7 @@ public class MatrixFactory {
         return producer;
     }
 
-    public Map getMutableProducers() {
+    private Map getMutableProducers() {
         return Collections.unmodifiableMap(mutableMatrixProducers);
     }
 }

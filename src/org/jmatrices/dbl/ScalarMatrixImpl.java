@@ -20,7 +20,7 @@ package org.jmatrices.dbl;
 
 /**
  * ScalarMatrixImpl
- * <br>Author: purangp</br>
+ * <br>@author ppurang</br>
  * <br>
  * Date: 16.06.2004
  * Time: 13:39:12
@@ -89,7 +89,7 @@ class ScalarMatrixImpl extends AbstractSquareMatrix {
         return new ScalarMatrixImpl(rows(), scalar);
     }
 
-    protected Matrix createClone() {
+    protected Matrix createNascentClone() {
         throw new UnsupportedOperationException("The need to call this operation should never occur.");
     }
 }

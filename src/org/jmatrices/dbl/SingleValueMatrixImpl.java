@@ -20,7 +20,7 @@ package org.jmatrices.dbl;
 
 /**
  * SingleValueMatrixImpl
- * <br>Author: purangp</br>
+ * <br>@author ppurang</br>
  * <br>
  * Date: 16.06.2004
  * Time: 14:06:23
@@ -83,7 +83,7 @@ class SingleValueMatrixImpl extends AbstractMatrix {
         return new SingleValueMatrixImpl(rows, cols, scalar);
     }
 
-    protected Matrix createClone() {
+    protected Matrix createNascentClone() {
         throw new UnsupportedOperationException("The need to call this operation should never occur.");
     }
 }

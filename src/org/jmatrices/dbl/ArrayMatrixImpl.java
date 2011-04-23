@@ -19,17 +19,16 @@
 package org.jmatrices.dbl;
 
 /**
- * ArrayMatrixImpl
- * <p/>
- * Author: purangp
- * </p>
+ * ArrayMatrixImpl implements a matrix based on a two dimensional array that stores elements row wise.
+ *
+ * @author ppurang
  * Date: 07.03.2004
  * Time: 16:06:06
  */
 class ArrayMatrixImpl extends AbstractMatrix implements MutableMatrixProducer {
     protected double[][] rowView;
 
-    //remark: Code at the heart of matrix productions.
+    //remark: Code at the heart of matrix creations.
     private static final ArrayMatrixImpl producer = new ArrayMatrixImpl();
     static {
         MatrixFactory.getInstance().registerMatrixProducer(producer.getClass().getName(), producer);
@@ -45,8 +44,7 @@ class ArrayMatrixImpl extends AbstractMatrix implements MutableMatrixProducer {
     /**
      * Constructor that sets the dimensions of a matrix and initializes the 2d array
      *
-     * @param rows
-     * @param cols
+     * @param cols columns
      * @throws IllegalArgumentException if rows or columns are less than 1
      */
     public ArrayMatrixImpl(int rows, int cols) {
@@ -55,7 +53,7 @@ class ArrayMatrixImpl extends AbstractMatrix implements MutableMatrixProducer {
     }
 
     /**
-     * Sets an element at the given position to a new value
+     * Sets an elnkement at the given position to a new value
      *
      * @param row   row in which the element occurs
      * @param col   column in which the element occurs
@@ -75,11 +73,11 @@ class ArrayMatrixImpl extends AbstractMatrix implements MutableMatrixProducer {
     protected double getValue0(int row, int col) {
         return rowView[row - 1][col - 1];
     }
-
-    protected Matrix createClone() {
+    /**{@inheritDoc}*/
+    protected Matrix createNascentClone() {
         return new ArrayMatrixImpl(rows, cols);
     }
-
+    /**{@inheritDoc}*/
     public Matrix getMatrix(int rows, int cols) {
         return new ArrayMatrixImpl(rows,cols);
     }

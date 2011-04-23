@@ -3,7 +3,6 @@ package org.jmatrices.dbl.measure;
 import org.jmatrices.dbl.Matrix;
 import org.jmatrices.dbl.decomposition.LU;
 import org.jmatrices.dbl.decomposition.SV;
-
 import org.jmatrices.dbl.rowcoltr.ColumnTransformer;
 import org.jmatrices.dbl.rowcoltr.RowTransformer;
 import org.jmatrices.dbl.transformer.MatrixEBETransformation;
@@ -20,7 +19,7 @@ import org.jmatrices.dbl.transformer.MatrixTransformer;
  * All operations on a matrix fitting this pattern can be found here!
  * </p>
  * <p/>
- * Author: purangp
+ * @author ppurang
  * </p>
  * Date: 08.03.2004
  * Time: 00:09:12
@@ -29,7 +28,6 @@ public final class MatrixMeasure {
     //classical measures
     /**
      * Gets the getDeterminant of a non-singular square matrix.
-     * <br/>todo is the observation about non-singularity true?
      *
      * @param m Matrix
      * @return detrminant
@@ -111,10 +109,12 @@ public final class MatrixMeasure {
      */
     public static double getMean(final Matrix m, boolean adjustment) {
         double prod = m.rows() * m.cols();
-        if (adjustment)
+        if (adjustment) {
             return ((prod / (prod - 1)) * getMean(m, false));
-        else
+        }
+        else {
             return RowTransformer.mean(ColumnTransformer.mean(m, false), false).getValue(1, 1);
+        }
     }
 
 

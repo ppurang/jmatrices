@@ -19,12 +19,9 @@
 package org.jmatrices.dbl;
 
 /**
- * AbstractSquareMatrix
- * <br>Author: purangp</br>
- * <br>
- * Date: 25.06.2004
- * Time: 19:20:42
- * </br>
+ * AbstractSquareMatrix is an abstract implementation meant for square matrices.
+ * @author ppurang
+ *         created 25.06.2004 - 19:20:42
  */
 public abstract class AbstractSquareMatrix extends AbstractMatrix {
     /**
@@ -45,8 +42,8 @@ public abstract class AbstractSquareMatrix extends AbstractMatrix {
     }
     /**
      * Constructor that allows construction of the object iff (rows==cols)
-     * @param rows
-     * @param cols
+     * @param rows  rows
+     * @param cols  columns
      */
     public AbstractSquareMatrix(int rows, int cols) {
         super(rows, cols);

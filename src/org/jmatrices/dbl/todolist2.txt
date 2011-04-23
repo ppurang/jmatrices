@@ -1,0 +1,9 @@
+update cobertura
+
+findbugs reports how to set project name?
+
+update locc and locc style
+
+
+jdepend?
+

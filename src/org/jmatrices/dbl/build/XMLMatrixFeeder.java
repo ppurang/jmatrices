@@ -124,10 +124,7 @@ public class XMLMatrixFeeder implements MatrixFeeder {
         } catch (DataConversionException e) {
             throw new RuntimeException("Wrapped a DataConversionException", e);
         }
-
     }
-
-
 
     /*
     public Row getRow(int index) {

@@ -2,8 +2,6 @@ package org.jmatrices.dbl.rowcoltr;
 
 import org.jmatrices.dbl.Matrix;
 import org.jmatrices.dbl.MatrixFactory;
-import org.jmatrices.dbl.Matrix;
-import org.jmatrices.dbl.MatrixFactory;
 
 /**
  * ColumnTransformer captures the operations that can be carried out on columns of a matrix
@@ -14,28 +12,12 @@ import org.jmatrices.dbl.MatrixFactory;
  * All operations on a matrix fitting this pattern can be found here!
  * </p>
  * <p>
- * Author: purangp
+ * @author ppurang
  * </p>
  * Date: 07.03.2004
  * Time: 20:46:52
  */
 public final class ColumnTransformer {
-    /**
-     * <br>
-     * <font color="red">this is an open thought of trying to make column operations eleganter and perhaps faster </font>
-     * Check out the "see also" section
-     * </br>
-     * todo remove this method ... 
-     * @param m
-     * @param co
-     * @return
-     * @see ColumnTransformation
-     */
-    public static Matrix applyColumnOperation(final Matrix m, ColumnTransformation co) {
-        throw new UnsupportedOperationException("to be implemented");
-
-    }
-
     /**
      * Sums up all the columns and returns them as a row vector
      *

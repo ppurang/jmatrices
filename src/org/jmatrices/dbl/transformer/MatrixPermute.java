@@ -11,7 +11,7 @@ import org.jmatrices.dbl.Matrix;
  * </font>
  * </p>
  * <p>
- * Author: purangp
+ * @author ppurang
  * </p>
  * Date: 12.03.2004
  * Time: 12:43:51

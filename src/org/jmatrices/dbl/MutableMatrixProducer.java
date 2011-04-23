@@ -19,18 +19,30 @@
 package org.jmatrices.dbl;
 
 /**
- * MutableMatrixProducer allows production of matrices.
- * remark: introduced to make it easier to a) produce matrices and b) let the matrices themselves have the responsibility to create their instances. @see ArrayMatrixImpl 
- * @author purangp
+ * MutableMatrixProducer allows creation of mutable matrices.
+ * remark: introduced to make it easier to
+ * a) create mutable matrices and
+ * b) allow implementations a posibility of creating matrices of their type.
+ * <p/>
+ * Important: To check whether or not an implementation of matrix has a or is itself a  MutableMatrixProducer
+ * please don't rely on <code>instanceof</code>. Instead use the method {@link MatrixFactory#getProducer(String)}.
+ * <p/>
+ * For a usage please see the {@link org.jmatrices.dbl.PropertiesFileMatrixSelectionStrategy}
+ * <p/>
+ * For an implementation where the Matrix implementation also implements this interface please
+ * see {@link org.jmatrices.dbl.ArrayMatrixImpl}
+ *
+ * @author ppurang
  *         Created 13.12.2004 - 23:01:13
  */
 public interface MutableMatrixProducer {
     /**
      * Gets the matrix with the given dimensions.
+     *
      * @param rows number of rows
      * @param cols number of columns
      * @return matrix with the given dimensions.
      */
-     Matrix getMatrix(int rows, int cols);
-    
+    Matrix getMatrix(int rows, int cols);
+
 }

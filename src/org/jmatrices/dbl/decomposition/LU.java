@@ -16,9 +16,9 @@ import org.jmatrices.dbl.MatrixFactory;
  * </p> <p><font color="red"> The code is basically JAMA code with modifications made to fit in the scheme of things.
  * </font></p>
  * <p/>
- * Author: purangp </p> Date: 08.03.2004 Time: 23:37:48
+ * @author ppurang </p> Date: 08.03.2004 Time: 23:37:48
  */
-public class LU {
+public final strictfp class LU {
 /* ------------------------
    Class variables
  * ------------------------ */
@@ -58,7 +58,7 @@ public class LU {
     public LU(Matrix a) {   //renamed A to a
         // Use a "left-looking", dot-product, Crout/Doolittle algorithm.
 
-        LU = MatrixFactory.getMatrixClone(a);     //changed
+        LU = MatrixFactory.getMutableMatrixClone(a);     //changed
         m = a.rows();
         n = a.cols();
         //piv = new int[m];  //todo change this into a matrix?
@@ -244,7 +244,7 @@ public class LU {
         int nx = b.cols();
         Matrix Xmat = Matrices.getSubMatrix(b, convertVectorToArray(piv), 0 + 1, nx - 1 + 1);//changed to reflect indices from 1,1   //piv must have indices begining from 1
         //Matrix Xmat = B.getSubMatrix(getAdjustedPivot(),0+1,nx-1+1);//if we wouldn't have changed piv earlier we could have done that in a method named adjustedPivot .. I tested it and it was working!
-        Matrix X = MatrixFactory.getMatrixClone(Xmat);
+        Matrix X = MatrixFactory.getMutableMatrixClone(Xmat);
 
         // Solve L*Y = B(piv,:)
         for (int k = 1; k <= n; k++) {

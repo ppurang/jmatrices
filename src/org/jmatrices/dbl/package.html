@@ -1,0 +1,26 @@
+<body>
+<hr/>
+<h1>Jmatrices Library</h1>
+<p align="right">Copyright (C) 2004 - 2007  Piyush Purang</p>
+<p align="right">Check <a href="License.txt">License.txt</a> for the license terms</p>
+<hr/>
+<h2>org.jmatrices.dbl</h2>
+This is the core of the library. The most important member of this
+package  is the {@link org.jmatrices.dbl.Matrix} which defines the
+contract that a Matrix object should fulfill.
+
+This package also implements the infrastructural services required
+to support different implementations via the
+class {@link org.jmatrices.dbl.MatrixFactory}, interfaces
+{@link org.jmatrices.dbl.MutableMatrixProducer} and
+{@link org.jmatrices.dbl.MatrixSelectionStrategy}
+
+This package also provides some implementation classes for example:
+
+{@link org.jmatrices.dbl.MatrixSelectionStrategy#getArrayMatrix}
+returns a two-dimensional-array based implementation of Matrix.
+
+This package also provides abstract implementations that are suitable
+for extension and provide contractural checks laid down by the Matrix
+interface.
+</body>

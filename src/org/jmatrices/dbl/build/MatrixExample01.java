@@ -1,9 +1,7 @@
 package org.jmatrices.dbl.build;
 
-import org.jmatrices.dbl.operator.MatrixOperator;
-import org.jmatrices.dbl.build.MatrixBuilder;
 import org.jmatrices.dbl.Matrix;
-import org.jmatrices.dbl.MatrixFactory;
+import org.jmatrices.dbl.operator.MatrixOperator;
 
 /**
  * MatrixExample01.
@@ -20,7 +18,7 @@ public class MatrixExample01 {
             {4, 5, 6},
             {7, 8, 9}
         };
-        Matrix a = MatrixBuilder.getMatrix(3, 3, null, aInitValues);
+        Matrix a = MatrixBuilder.getMatrixFromArray(3, 3, null, aInitValues);
         Matrix b = MatrixFactory.getIdentityMatrix(3);
 
         Matrix c = MatrixOperator.multiply(a, b);

@@ -24,9 +24,19 @@ import java.util.Locale;
 
 /**
  * AbstractMatrix implements all the methods in Matrix except getValue and setValue which are left to be implemented
- * by concrete classes
+ * by concrete classes.
  *
- * @author purangp
+ * Concrete classes have to implement the follwing methods
+ * <ol>
+ *  <li>
+ *  {@link #getValue0(int, int)}
+ *  </li>
+ *  <li>
+ *  {@link #setValue0(int, int, double)} 
+ *  </li>
+ * </ol>
+ *
+ * @author ppurang
  *         created 07.06.2004 - 14:47:43
  */
 public abstract class AbstractMatrix implements Matrix {
@@ -53,18 +63,19 @@ public abstract class AbstractMatrix implements Matrix {
      * @throws IllegalArgumentException if rows or columns are less than 1
      */
     public AbstractMatrix(int rows, int cols) {
-        if (rows < 1 || cols < 1)
-            throw new IllegalArgumentException("Rows and/or Columns can't be less than 1");
-        else {
+        if (rows < 1 || cols < 1) {
+            throw new IllegalArgumentException("Rows and/or Columns can't be less than 1 rows="
+                    + rows
+                    + " cols="
+                    + cols);
+        } else {
             this.rows = rows;
             this.cols = cols;
         }
     }
 
     /**
-     * Gets the number of rows in the matrix
-     * <p/>
-     * Counts from 1
+     * Gets the number of rows in the matrix. Counts from 1.
      *
      * @return number of rows in the matrix
      */
@@ -73,39 +84,58 @@ public abstract class AbstractMatrix implements Matrix {
     }
 
     /**
-     * Gets the number of columns in the matrix
-     * <p/>
-     * counts from 1
+     * Gets the number of columns in the matrix. Counts from 1.
      *
      * @return number of columns in the matrix
      */
     public int cols() {
         return cols;
     }
-
+    /**{@inheritDoc}*/
     public final double getValue(int row, int col) {
         withinBounds(row, col);
         return getValue0(row, col);
     }
 
+    /**
+     * Abstract method to be implemented by the concrete classes.
+     * This method is called by the {@link #getValue(int, int)}
+     * after checking the preconditions related to the indices.
+     * @param row row
+     * @param col column
+     * @return value
+     */
     protected abstract double getValue0(int row, int col);
 
+    /**{@inheritDoc}*/
     public final void setValue(int row, int col, double value) {
         withinBounds(row, col);
         setValue0(row, col, value);
     }
 
+    /**
+     * Abstract method to be implemented by the concrete classes.
+     * This method is called by the {@link #setValue(int, int, double)} 
+     * after checking the preconditions related to the indices.
+     * @param row row
+     * @param col column
+     * @param value value to set at the given <code>row</code> and <code>col</code>
+     */
     protected abstract void setValue0(int row, int col, double value);
 
     /**
      * Checks to see if row and column combination are within bounds.
      *
-     * @param row
-     * @param col
+     * @param row row
+     * @param col column
      */
     protected void withinBounds(int row, int col) {
-        if (row < 1 || col < 1 || row > rows() || col > cols())
-            throw new IndexOutOfBoundsException("row and col parameters must satisfy 0 < row/col <= rows()/cols()");
+        if (row < 1 || col < 1 || row > rows() || col > cols()) {
+            throw new IndexOutOfBoundsException("row and col parameters must satisfy 0 <"
+                    + " row(" + row + ")/col(" + col + ")"
+                    + " <= rows(" + rows() + ")/cols(" + cols() + ")."
+                    );
+        }
     }
 
     /**
@@ -144,17 +174,17 @@ public abstract class AbstractMatrix implements Matrix {
      * @return deep copy of the matrix
      */
     public Object clone() {         //question move clone into Matrix or drop it?
-        Matrix m = createClone();
+        Matrix m = createNascentClone();
         return populateClone(m);
     }
 
     /**
      * remark make sure this exists and doesn't depend on any other class to do this operation.
-     * remark Does defensive copying
+     * remark should do defensive copying
      *
      * @return matrix that shares implementation class with this matrix
      */
-    protected abstract Matrix createClone();
+    protected abstract Matrix createNascentClone();
 
     /**
      * Used for populating a matrix that is supposed to be a clone.
@@ -200,6 +230,7 @@ public abstract class AbstractMatrix implements Matrix {
 
     /**
      * todo think about caching hashCodes.
+     * todo rethink implementation
      *
      * @return int representing the hashCode.
      */

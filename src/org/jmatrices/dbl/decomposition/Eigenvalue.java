@@ -2,7 +2,6 @@ package org.jmatrices.dbl.decomposition;
 
 import org.jmatrices.dbl.Matrix;
 import org.jmatrices.dbl.MatrixFactory;
-import org.jmatrices.dbl.*;
 
 /**
  * EigenvalueDecomposition
@@ -25,14 +24,13 @@ import org.jmatrices.dbl.*;
  * The code is basically JAMA code with modifications made to fit in the scheme of things.
  * </font></p>
  * <p>
- * Author: purangp
+ * @author ppurang
  * </p>
  * Date: 13.03.2004
  * Time: 14:25:02
  */
-public class Eigenvalue {
+public final strictfp class Eigenvalue {
 
-    private Matrix hint;
     /**
      * Row and column dimension (square matrix).
      *
@@ -456,7 +454,8 @@ public class Eigenvalue {
                     f = f / h;
                     for (int j = m; j <= high; j++) {
                         //H[i][j] -= f * ort[j];
-                        H.setValue(i,j,H.getValue(i,j)-f*ort.getValue(j,1));
+                        double hValue = H.getValue(i,j);
+                        H.setValue(i,j,hValue-f*ort.getValue(j,0));
                     }
                 }
                 //ort[m] = scale * ort[m];
@@ -1089,12 +1088,11 @@ public class Eigenvalue {
      */
 
     public Eigenvalue(Matrix matrix) {
-        hint = matrix;
         MatrixAdaptor A = new MatrixAdaptor(MatrixFactory.getMatrixClone(matrix));
         n = matrix.cols();
         V = new MatrixAdaptor(MatrixFactory.getMatrix(n,n,matrix));
-        d = new MatrixAdaptor(MatrixFactory.getMatrix(n,1,matrix));;
-        e = new MatrixAdaptor(MatrixFactory.getMatrix(n,1,matrix));;
+        d = new MatrixAdaptor(MatrixFactory.getMatrix(n,1,matrix));
+        e = new MatrixAdaptor(MatrixFactory.getMatrix(n,1,matrix));
 
 
         /*issymmetric = true;
@@ -1119,8 +1117,8 @@ public class Eigenvalue {
             tql2();
 
         } else {
-            H = new MatrixAdaptor(MatrixFactory.getMatrix(n,n,matrix));;
-            ort = new MatrixAdaptor(MatrixFactory.getMatrix(n,1,matrix));;
+            H = new MatrixAdaptor(MatrixFactory.getMatrix(n,n,matrix));
+            ort = new MatrixAdaptor(MatrixFactory.getMatrix(n,1,matrix));
 
             for (int j = 0; j < n; j++) {
                 for (int i = 0; i < n; i++) {

@@ -6,7 +6,7 @@ import org.jmatrices.dbl.MatrixFactory;
 /**
  * MatrixEBETransformer is responsible for applying the <code>MatrixEBETransformation</code> to each element in a matrix
  * <p>
- * Author: purangp
+ * @author ppurang
  * </p>
  * Date: 07.03.2004
  * Time: 15:54:06

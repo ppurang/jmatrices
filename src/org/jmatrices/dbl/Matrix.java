@@ -18,48 +18,36 @@
  */
 package org.jmatrices.dbl;
 
-import java.io.Serializable;
-
 /**
  * Matrix represents a <strong>structurally immutable</strong> matrix of numbers(double) with <strong>index begining at 1</strong>.
- *
- * The only way to change the elements in a matrix is through {@link #setValue(int, int, double)}
- * </p><p>
+ * <br/>
+ * The only way to change the elements in a matrix is through {@link #setValue(int,int,double)}
+ * <br/>
  * A good convention to follow is to use the following as indices while looping over matrix elements.
  * <pre>
  * row=1; row&lt;=rows(); row++
  * col=1; col&lt;=cols(); coll++
  * </pre>
- *
- * </p><p>
  * And use the normal <code>i,j,k</code> etc. to iterate over arrays!
- * </p><p>
+ * <br/>
  * Two matrices are equal iff they have same dimensions and each corresponding element is equal.
- * </p><p>
+ * <br/>
  * Matrix's clone must be a deep copy.
- * </p>
- * @author purangp
+ * <br/>
  *
- * created 07.03.2004 - 15:52:02
+ * @author ppurang
+ *         created 07.03.2004 - 15:52:02
  */
-public interface Matrix extends Serializable, Cloneable {
+public interface Matrix extends Cloneable {
     /**
-     * Gets the number of rows in the matrix
-     * <p/>
-     * Counts from 1
-     * <br/>
-     * Can't be less than 1
+     * Gets the number of rows in the matrix. Starts from 1. Can't be less than 1.
      *
      * @return number of rows in the matrix
      */
     int rows();
 
     /**
-     * Gets the number of columns in the matrix
-     * <p/>
-     * counts from 1
-     * <br/>
-     * Can't be less than 1
+     * Gets the number of columns in the matrix. Starts from 1. Can't be less than 1.
      *
      * @return number of columns in the matrix
      */
@@ -85,7 +73,7 @@ public interface Matrix extends Serializable, Cloneable {
     /**
      * Gets the value of the element at the given row and column
      * <br>Will throw {@link IndexOutOfBoundsException} if index bounds are violated</br>
-     *
+     * <p/>
      * <pre>
      * Valid bounds are:
      *  1 &lt;= row &lt;= this.rows()
@@ -99,7 +87,7 @@ public interface Matrix extends Serializable, Cloneable {
     double getValue(int row, int col);
 
     /**
-     * (Remark) Forces <code>Matrix</code> objects to override equals as defined in <code>Object</code>.
+     * Forces <code>Matrix</code> objects to override equals as defined in <code>Object</code>.
      *
      * @param obj Object to be compared against
      * @return <code>true</code> iff obj is instance of Matrix and all corresponding elements are equal.
@@ -107,12 +95,12 @@ public interface Matrix extends Serializable, Cloneable {
     boolean equals(Object obj);
 
     /**
-     * (Remark) As we force overriding of equals so should we force overriding of hashCode.
+     * Remark As we force overriding of equals hence we should also force overriding of hashCode.
      */
     int hashCode();
 
     /**
-     * (Remark) <code>Cloneable</code> by itself doesn't quarantee that an appropriate clone exists hence need for forcing its implementation.
+     * Remark <code>Cloneable</code> by itself doesn't quarantee that an appropriate clone exists hence need for forcing its implementation.
      * May throw a CloneNotSupportedException.
      */
     Object clone() throws CloneNotSupportedException;

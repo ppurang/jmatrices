@@ -2,8 +2,6 @@ package org.jmatrices.dbl.rowcoltr;
 
 import org.jmatrices.dbl.Matrix;
 import org.jmatrices.dbl.transformer.MatrixTransformer;
-import org.jmatrices.dbl.Matrix;
-import org.jmatrices.dbl.MatrixFactory;
 
 /**
  * RowTransformer  captures the operations that can be carried out on rows of a matrix
@@ -14,7 +12,7 @@ import org.jmatrices.dbl.MatrixFactory;
  * All operations on a matrix fitting this pattern can be found here!
  * </p>
  * <p>
- * Author: purangp
+ * @author ppurang
  * </p>
  * Date: 07.03.2004
  * Time: 20:37:21

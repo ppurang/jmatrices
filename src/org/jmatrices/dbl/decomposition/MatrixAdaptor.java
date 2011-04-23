@@ -21,12 +21,22 @@ package org.jmatrices.dbl.decomposition;
 import org.jmatrices.dbl.Matrix;
 
 /**
- * MatrixAdaptor
+ * MatrixAdaptor adapts a matrix to start the row and column
+ * indices from 0 instead of from 1.
  *
- * @author purangp
+ * MatrixAdaptor could have been implemented as an implementation of Matrix but
+ * as the contract isn't the same hence the Adaptor object isn't conceptually
+ * the same as the adaptee.
+ *
+ * Care should be taken when iterating over an adaptor and matrix object in the same scope.
+ * Ideally in a scope such as a mathod or even in an entire class it is advised to use either adptor
+ * objects or matrix objects. Mixing the two will lead to confusion and hence mistakes. These mistakes
+ * should fail fast with an IllegalArgumentException.
+ *
+ * @author ppurang
  *         Created 07.02.2005 - 00:29:53
  */
-public class MatrixAdaptor implements Matrix {
+public final class MatrixAdaptor {
     private Matrix adaptee;
 
     public MatrixAdaptor(Matrix delegate) {
@@ -68,7 +78,10 @@ public class MatrixAdaptor implements Matrix {
     }
 
     public boolean equals(Object obj) {
+        boolean result = true;
+        if(obj instanceof MatrixAdaptor) {
+            return this.adaptee.equals(((MatrixAdaptor) obj).adaptee);
+        }
         return adaptee.equals(obj);
     }
-
 }

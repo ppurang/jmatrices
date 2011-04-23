@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 /**
  * MatrixParser
- * <p>Author: purangp</p>
+ * <p>@author ppurang</p>
  * Date: 30.04.2004
  * Time: 15:02:25
  */

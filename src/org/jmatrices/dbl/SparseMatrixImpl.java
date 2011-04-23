@@ -23,7 +23,7 @@ import java.util.TreeMap;
 
 /**
  * SparseMatrixImpl
- * <br>Author: purangp</br>
+ * <br>@author ppurang</br>
  * <br>
  * Date: 16.06.2004
  * Time: 20:25:04
@@ -132,7 +132,7 @@ class SparseMatrixImpl extends AbstractMatrix implements MutableMatrixProducer {
         }
     }
 
-    protected Matrix createClone() {
+    protected Matrix createNascentClone() {
         return new SparseMatrixImpl(rows(),cols());
     }
 

@@ -1,32 +1,31 @@
 package org.jmatrices.dbl.build;
 
-import org.jmatrices.dbl.transformer.MatrixConditionalEBETransformation;
-import org.jmatrices.dbl.transformer.MatrixEBETransformation;
-import org.jmatrices.dbl.transformer.MatrixEBETransformer;
 import org.jmatrices.dbl.Matrix;
 import org.jmatrices.dbl.MatrixFactory;
+import org.jmatrices.dbl.transformer.MatrixEBETransformation;
+import org.jmatrices.dbl.transformer.MatrixEBETransformer;
 
 import java.util.Iterator;
 import java.util.List;
 
 /**
- * MatrixBuilder can be used to build matrices, especially prepopulated matrices.
- * remark to avoid circular dependencies .. MatrixFactory was split into MatrixFactory and MatrixBuilder
- * Author: purangp
- * </p>
+ * MatrixBuilder can be used to build (complicated-)matrices, especially prepopulated matrices
+ * and to avoid circular dependencies between packages (many methods from MatrixFactory were moved here).
+ *
+ *
  * Date: 07.03.2004
  * Time: 15:56:59
+ * @author Piyush Purang ppurang gmail com
  */
 public class MatrixBuilder {
 
     /**
      * Gets a matrix of the asked dimensions, filled with random values
-     * <p/>
      *
      * @param rows number of rows in the matrix (>= 1)
      * @param cols number of columns in the matrix (>= 1)
      * @param hint acts as a hint for the right implementation to use
-     * @return Matrix of the given dimensions
+     * @return Matrix of the given dimensions filled with random values
      */
     public static Matrix getRandomMatrix(int rows, int cols, Matrix hint) {
         return MatrixEBETransformer.ebeTransform(MatrixFactory.getMatrix(rows, cols, hint), new MatrixEBETransformation() {
@@ -39,64 +38,38 @@ public class MatrixBuilder {
     /**
      * Gets a matrix of the asked dimensions.
      * <p/>
-     * All elements are setValue to scalar.
-     *
-     * @param rows   number of rows in the matrix (>= 1)
-     * @param cols   number of columns in the matrix (>= 1)
-     * @param hint   acts as a hint for the right implementation to use
-     * @param scalar initial value of the elements
-     * @return Matrix of the given dimensions and value
-     */
-    public static Matrix getMatrix(int rows, int cols, Matrix hint, double scalar) {
-        return scalarAddition(MatrixFactory.getMatrix(rows, cols, hint), scalar);
-    }
-
-    /**
-     * Gets a matrix of the asked dimensions.
+     * All elements are set to values in the passed array.
      * <p/>
-     * All elements are setValue to values in the passed array.
+     * If the array is bigger than the matrix then the unneeded values are discarded.
+     * <pre>
+     * Note: Theoretically we could deduct the dimensions of the matrix from the array.
+     * But we don't so that the client code
+     * a) knows what it is doing and
+     * b) is disciplined enough to pass legal arguments
+     * </pre>
      *
      * @param rows   number of rows in the matrix (>= 1)
      * @param cols   number of columns in the matrix (>= 1)
      * @param hint   acts as a hint for the right implementation to use
      * @param values initial value of the elements
      * @return Matrix of the given dimensions and values
+     * @throws ArrayIndexOutOfBoundsException if the passed array is smaller in dimensions than the required matrix;
+     *                                        this might happen if a row is smaller or a column is missing in the array.
      */
-    public static Matrix getMatrix(int rows, int cols, Matrix hint, double values[][]) {
+    public static Matrix getMatrixFromArray(int rows, int cols, Matrix hint, double values[][]) {
         Matrix m = MatrixFactory.getMatrix(rows, cols, hint);
         return populateElements(m, values);
     }
 
-    /**
-     * Gets an Identity matrix
-     *
-     * @param dim  dimension of the square matrix
-     * @param hint acts as a hint for the right implementation to use
-     * @return Square matrix with the diagonal elements setValue to 1.
-     */
-    public static Matrix getIdentityMatrix(int dim, Matrix hint) {
-        return getScalarMatrix(dim, hint, 1);
+    private static Matrix populateElements(Matrix m, double[][] elems) {
+        for (int i = 1; i < m.rows(); i++) {
+            for (int j = 1; j < m.cols(); j++) {
+                m.setValue(i, j, elems[i - 1][j - 1]);
+            }
+        }
+        return m;
     }
 
-    /**
-     * Gets a scalar matrix.
-     *
-     * @param dim    dimension of the square matrix
-     * @param hint   acts as a hint for the right implementation to use
-     * @param scalar the value the main diagonal elements have to be setValue to
-     * @return Square matrix with the diagonal elements setValue to scalar value.
-     */
-    public static Matrix getScalarMatrix(int dim, Matrix hint, final double scalar) {
-        Matrix m = MatrixFactory.getMatrix(dim, dim, hint);
-        return MatrixEBETransformer.ebeTransform(m, new MatrixConditionalEBETransformation() {
-            public double transform(int row, int col, double element) {
-                if (row == col)
-                    return scalar;
-                else
-                    return element;
-            }
-        });
-    }
 
     /**
      * Gets a column vector with list values composing the vector's values.
@@ -106,10 +79,11 @@ public class MatrixBuilder {
      * @param list list containing the <code>Double</code> values that will be used to compose the vector
      * @param hint acts as a hint for the right implementation to use
      * @return column vector
+     * @throws IllegalArgumentException if the size of the list is less than 1
      */
     public static Matrix getMatrix(List list, Matrix hint) {
         if (list.size() <= 0)
-            throw new IllegalArgumentException("Array list size should atleast be 1");
+            throw new IllegalArgumentException("List size should atleast be 1");
         // return MatrixFactory.getEmptyMatrix();
         Matrix cv = MatrixFactory.getMatrix(list.size(), 1, hint);
         Iterator iter = list.iterator();
@@ -123,52 +97,12 @@ public class MatrixBuilder {
     }
 
     /**
-     * PRIVATE MEMBERS
+     * private constructor to avoid instances being creted.
      */
     private MatrixBuilder() {
     }
 
-    /**
-     * remark - perhaps should be moved to transformer package and made public!
-     *
-     * @param m
-     * @param s
-     * @return
-     */
-    private static Matrix scalarAddition(Matrix m, final double s) {
-        return MatrixEBETransformer.ebeTransform(m, new MatrixEBETransformation() {
-            public double transform(double element) {
-                return element + s; //could be +, *, -, /
-            }
-        });
-    }
-
-    private static Matrix populateElements(Matrix m, double[][] elems) {
-        //question - performance hit but better management of code - any better solution?!
-        if (checkConformity(elems, m.rows(), m.cols())) {
-            for (int i = 0; i < elems.length; i++) {
-                for (int j = 0; j < elems[i].length; j++) {
-                    m.setValue(i + 1, j + 1, elems[i][j]);
-                }
-            }
-            return m;
-        } else
-            throw new IllegalArgumentException("Array to initialise doesn't conform with matrix dimensions");
-    }
-
-    private static boolean checkConformity(double[][] elems, int rows, int cols) {
-        if (elems.length != rows) {
-            return false;
-        } else {
-            for (int row = 0; row < elems.length; row++) {
-                if (elems[row].length != cols) return false;
-            }
-        }
-        return true;
-    }
-
 }
-
 
 /**
  *  Jmatrices - Matrix Library

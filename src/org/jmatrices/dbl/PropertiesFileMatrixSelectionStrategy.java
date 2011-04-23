@@ -1,51 +1,90 @@
 package org.jmatrices.dbl;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.logging.Logger;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
- * PropertiesFileMatrixSelectionStrategy.
+ * PropertiesFileMatrixSelectionStrategy implements a MatrixSelectionStrategy based on rules
+ * defined in a properties file.
+ *
+ * Users can set such a file at runtime using the properties file definded by the system property
+ * {@link org.jmatrices.dbl.PropertiesFileMatrixSelectionStrategy#SYSTEM_PROPERTIES_FILE}. If a file is specified
+ * and there is an exception while loading it the program comes to a halt.
+ *
+ * If no such file is set then the library relies on the properties file
+ * {@link org.jmatrices.dbl.PropertiesFileMatrixSelectionStrategy#PROPERTIES_FILE_NAME}, co-located with this class,
+ * a part of the library.
+ *
+ * 
  *
  * @author ppurang
  *         created  25.03.2005 - 15:06:24
  */
 public class PropertiesFileMatrixSelectionStrategy implements MatrixSelectionStrategy {
-    public static final String PROPERTIES_FILE_DEFAULT = "default.properties";
+    private static final Logger LOGGER = Logger.getLogger("org.jmatrices.core");
+    public static final String PROPERTIES_FILE_NAME = "default.selection.properties";
     public static final String SYSTEM_PROPERTIES_FILE = "override.default.properties";
+
     public static final String PROP_HUGE_MATRIX_DIMENSION = "matrix.mutable.huge.dim";
     public static final String PROP_HUGE_MATRIX_CLASS = "matrix.mutable.huge.class";
     public static final String PROP_DEFAULT_MATRIX_CLASS = "matrix.mutable.default.class";
     public static final String PROP_MATRIX_PRECEDENCE_LIST = "matrix.mutable.precedence.list";
-    Map map = new HashMap();
+    private Map map = new HashMap();
 
     private Properties props = new Properties();
     private int hugeDimensions = 0;
 
     public PropertiesFileMatrixSelectionStrategy() {
-        String props_file = System.getProperty(SYSTEM_PROPERTIES_FILE, PROPERTIES_FILE_DEFAULT);
-        try {
-            props.load(new FileInputStream(props_file));
-        } catch (IOException e) {
-            throw new RuntimeException("Wrapped IOException in a RuntimeException", e);
+        final String propertiesFile = System.getProperty(SYSTEM_PROPERTIES_FILE);
+        if (propertiesFile != null) {
+            try {
+                props.load(new FileInputStream(propertiesFile));
+            } catch (IOException e) {
+                throw new IllegalStateException(
+                        "The overriding properties file wasn't found or is not a properties file: " + propertiesFile,
+                        e);
+            }
+        } else {
+            //try and load the default properties
+            try {
+                InputStream in = this.getClass().getResourceAsStream(PROPERTIES_FILE_NAME);
+                if (in != null) {
+                    props.load(in);
+                } else {
+                    throw new IllegalStateException("The properties file wasn't found on the classpath: "
+                            + PROPERTIES_FILE_NAME);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("Wrapped IOException in a RuntimeException", e);
+            }
         }
+
         hugeDimensions = Integer.parseInt(props.getProperty(PROP_HUGE_MATRIX_DIMENSION));
 
         String[] tokens = props.getProperty(PROP_MATRIX_PRECEDENCE_LIST).split(",");
         for (int index = 0; index < tokens.length; index++) {
             String token = tokens[index].trim();
-            map.put(token, new Integer(index));
+            map.put(token, Integer.valueOf(index));
         }
     }
 
 
-    public Matrix selectMutableMatrix(int rows, int cols, Matrix hint) {
+    public Matrix selectMutableMatrix(final int rows, final int cols, final Matrix hint) {
         Matrix m = null;
         if (isHugeMatrix(rows, cols)) {
             m = getHugeMatrix(rows, cols);
         } else {
-            if (hint instanceof MutableMatrixProducer) {
-                m = getMutableMatrix(rows, cols, (MutableMatrixProducer) hint);
+            MutableMatrixProducer producer = null;
+            if(hint != null) {
+                producer = MatrixFactory.getInstance().getProducer(hint.getClass().getName());
+            } 
+            if (producer != null) {
+                m = getMutableMatrix(rows, cols, producer);
             } else {
                 m = getDefaultMatrix(rows, cols);
             }
@@ -58,19 +97,24 @@ public class PropertiesFileMatrixSelectionStrategy implements MatrixSelectionStr
         if (isHugeMatrix(rows, cols)) {
             m = getHugeMatrix(rows, cols);
         } else {
-            if (a instanceof MutableMatrixProducer && b instanceof MutableMatrixProducer) {
-                m = selectBetweenMutableMatrixProducers(rows, cols, (MutableMatrixProducer) a, (MutableMatrixProducer) b);
-
-            } else if (a instanceof MutableMatrixProducer) {
-                m = getMutableMatrix(rows, cols, (MutableMatrixProducer) a);
-
-            } else if (b instanceof MutableMatrixProducer) {
-                m = getMutableMatrix(rows, cols, (MutableMatrixProducer) b);
+            MutableMatrixProducer producerA = null;
+            MutableMatrixProducer producerB = null;
+            if(a != null) {
+                producerA = MatrixFactory.getInstance().getProducer(a.getClass().getName());
+            }
+            if (b != null) {
+                producerB = MatrixFactory.getInstance().getProducer(b.getClass().getName());
+            }
+            if (producerA != null && producerB != null) {
+                m = selectBetweenMutableMatrixProducers(rows, cols, producerA, producerB);
+            } else if (producerA != null) {
+                m = getMutableMatrix(rows, cols, producerA);
+            } else if (producerB != null) {
+                m = getMutableMatrix(rows, cols, producerB);
             } else {
                 m = getDefaultMatrix(rows, cols);
             }
         }
-
         return m;
     }
 
@@ -111,11 +155,10 @@ public class PropertiesFileMatrixSelectionStrategy implements MatrixSelectionStr
             }
         } else if (aPlace == null && bPlace != null) {
             m = getMutableMatrix(rows, cols, b);
-        } else if (aPlace != null && bPlace == null) {
+        } else if (aPlace != null) {
             m = getMutableMatrix(rows, cols, a);
         } else {
-            //both aPlace and bPlace are nulls..
-            m = getMutableMatrix(rows, cols, a);
+            throw new AssertionError("Both the matrix producers can't be null");
         }
 
         return m;

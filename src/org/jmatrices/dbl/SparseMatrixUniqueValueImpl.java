@@ -18,7 +18,10 @@
  */
 package org.jmatrices.dbl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * SparseMatrixUniqueValueImpl implements a sparse matrix
@@ -30,7 +33,7 @@ import java.util.*;
  * 0 0 0 1
  * </pre>
  * Only the values 1, 2 and 3 will be stored.
- * <br>Author: purangp</br>
+ * <br>@author ppurang</br>
  * <br>
  * Date: 16.06.2004
  * Time: 21:58:09
@@ -40,6 +43,7 @@ class SparseMatrixUniqueValueImpl extends SparseMatrixImpl {
     private List uniqueValues = new ArrayList();
 
     private static final SparseMatrixUniqueValueImpl producer = new SparseMatrixUniqueValueImpl();
+
     static {
         MatrixFactory.getInstance().registerMatrixProducer(producer.getClass().getName(), producer);
     }
@@ -61,28 +65,28 @@ class SparseMatrixUniqueValueImpl extends SparseMatrixImpl {
      */
     public void setValue0(int row, int col, double value) {
         Key key = new Key(row, col);
-        if (elements.containsKey(key)) {
+
+        //todo we need to remove stale values but present implementtaion isn't correct
+        /*if (elements.containsKey(key)) {
             removeStaleValues(); // if the key already existed, some unique value might become stale
-        }
+        }*/
         if (value == 0) {
             elements.remove(key);   // if value is being set to zero just remove the entry
         }
         Double dblValue = new Double(value);
         if (!uniqueValues.contains(dblValue))
             uniqueValues.add(dblValue);
-        Integer index = new Integer(uniqueValues.indexOf(dblValue));
+        Integer index = Integer.valueOf(uniqueValues.indexOf(dblValue));
         elements.put(key, index);
-        System.out.println("no of elements" + elements.size());
-        System.out.println("no of unique values " + uniqueValues.size());
     }
 
     private synchronized void removeStaleValues() {
         List tmpList = new ArrayList();
         Collection collection = elements.values();
-        Iterator iter  = collection.iterator();
-        while(iter.hasNext()) {
+        Iterator iter = collection.iterator();
+        while (iter.hasNext()) {
             int index = ((Integer) iter.next()).intValue();
-            tmpList.add(index,uniqueValues.get(index));
+            tmpList.add(index, uniqueValues.get(index));
         }
         uniqueValues = tmpList;
     }
@@ -95,10 +99,15 @@ class SparseMatrixUniqueValueImpl extends SparseMatrixImpl {
      * @return value of the element
      */
     public double getValue0(int row, int col) {
-        return ((Double) uniqueValues.get((
-                (Integer) elements.get(new Key(row, col))
-                ).intValue())
-                ).doubleValue();
+        double returnValue = 0;
+        if (elements.containsKey(new Key(row, col))) {
+            returnValue = ((Double) uniqueValues.get((
+                    (Integer) elements.get(new Key(row, col))
+            ).intValue())
+            ).doubleValue();
+        }
+
+        return returnValue;
     }
 
     public Matrix getMatrix(int rows, int cols) {

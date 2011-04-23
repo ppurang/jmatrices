@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * or we might move them(to be methods) and negate to {@link MatrixEBETransformer}
  * </font></p>
  * <p/>
- * Author: purangp
+ * @author ppurang
  * <br/>
  * Date: 07.03.2004
  * Time: 17:03:20

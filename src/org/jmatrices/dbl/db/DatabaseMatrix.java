@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 /**
  * DatabaseMatrix
- * <br>Author: purangp</br>
+ * <br>@author ppurang</br>
  * <br>
  * Date: 10.06.2004
  * Time: 23:18:43
@@ -133,7 +133,7 @@ public class DatabaseMatrix extends AbstractMatrix implements MutableMatrixProdu
     }
 
 
-    protected Matrix createClone() {
+    protected Matrix createNascentClone() {
         return new DatabaseMatrix(rows(),cols());
     }
 

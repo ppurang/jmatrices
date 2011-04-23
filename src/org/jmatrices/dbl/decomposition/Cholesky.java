@@ -7,12 +7,12 @@ import org.jmatrices.dbl.MatrixFactory;
 
 /**
  * Created by IntelliJ IDEA.
- * User: purangp
+ * User: ppurang
  * Date: 16.10.2004
  * Time: 11:01:41
  * To change this template use File | Settings | File Templates.
  */
-public class Cholesky {
+public final strictfp class Cholesky {
     /**
      * Array for internal storage of decomposition.
      *
@@ -44,7 +44,7 @@ public class Cholesky {
 
     public Cholesky(Matrix matrix) {
         //double[][] A = Matrices.getArray(matrix);
-        Matrix A = MatrixFactory.getMatrixClone(matrix);
+        Matrix A = MatrixFactory.getMatrixClone(matrix);  //A isn't modified
 
         n = matrix.rows();
         //L = new double[n][n];
@@ -191,46 +191,36 @@ public class Cholesky {
         }
 
         //double[][] X = Matrices.getArray(b);
-        Matrix X = MatrixFactory.getMatrixClone(b);
+        MatrixAdaptor X = new MatrixAdaptor(MatrixFactory.getMutableMatrixClone(b));
+        MatrixAdaptor Ladapted = new MatrixAdaptor(L);
         int nx = b.cols();
 
         // Solve L*Y = B;
-        //for (int k = 0; k < n; k++) {
-        for (int k = 1; k <= n; k++) {
-            //for (int i = k + 1; i < n; i++) {
-            for (int i = k + 1; i <= n; i++) { //todo changed here i=k+1+1 to i=k+1
-                //for (int j = 0; j < nx; j++) {
-                for (int j = 1; j <= nx; j++) {
-                    //X[i][j] -= X[k][j] * L[i][k];
-                    X.setValue(i, j, X.getValue(i, j) - (X.getValue(k, j) * L.getValue(i, k)));
-                }
-            }
-            //for (int j = 0; j < nx; j++) {
-            for (int j = 1; j <= nx; j++) {
-                //X[k][j] /= L[k][k];
-                X.setValue(k, j, X.getValue(k, j) / L.getValue(k, k));
-            }
+        for (int k = 0; k < n; k++) {
+          for (int j = 0; j < nx; j++) {
+             for (int i = 0; i < k ; i++) {
+                 //X[k][j] -= X[i][j]*L[k][i];
+                 X.setValue(k, j, X.getValue(k, j) - (X.getValue(i, j) * Ladapted.getValue(i, k)));
+             }
+             //X[k][j] /= L[k][k];
+             X.setValue(k,j, X.getValue(k,j)/Ladapted.getValue(k,k));
+          }
         }
 
         // Solve L'*X = Y;
-        //for (int k = n - 1; k >= 0; k--) {
-        for (int k = n - 1 + 1; k >= 1; k--) {
-            //for (int j = 0; j < nx; j++) {
-            for (int j = 1; j <= nx; j++) {
-                //X[k][j] /= L[k][k];
-                X.setValue(k, j, X.getValue(k, j) / L.getValue(k, k));
-            }
-            //for (int i = 0; i < k; i++) {
-            for (int i = 1; i < k; i++) {   //todo changed i<= k to i <k
-                //for (int j = 0; j < nx; j++) {
-                for (int j = 1; j <= nx; j++) {
-                    //X[i][j] -= X[k][j] * L[k][i];
-                    X.setValue(i, j, X.getValue(i, j) - (X.getValue(k, j) * L.getValue(k, i)));
-                }
-            }
+        for (int k = n-1; k >= 0; k--) {
+          for (int j = 0; j < nx; j++) {
+             for (int i = k+1; i < n ; i++) {
+                 //X[k][j] -= X[i][j]*L[i][k];
+                 X.setValue(k, j, X.getValue(k, j) - (X.getValue(i, j) * Ladapted.getValue(i, k)));
+             }
+             //X[k][j] /= L[k][k];
+              X.setValue(k,j, X.getValue(k,j)/Ladapted.getValue(k,k));
+          }
         }
+
         //return MatrixFactory.getMatrix(n, nx, hint, X);
-        return X;
+        return X.getAdaptee();
     }
 
    /** public static void main(String[] args) {

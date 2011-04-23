@@ -19,8 +19,13 @@
 package org.jmatrices.dbl;
 
 /**
- * DiagonalMatrixImpl
- * <br>Author: purangp</br>
+ * DiagonalMatrixImpl implements matrix such that only diagonal elements are captured.
+ *
+ * Trying to modify non-diagonal elements (elements where row != column)
+ * will throw an IllegalArgumentException.
+ *
+ *
+ * @author ppurang
  * <br>
  * Date: 23.06.2004
  * Time: 23:13:26
@@ -84,7 +89,7 @@ class DiagonalMatrixImpl extends AbstractSquareMatrix {
     /**
      * remark we can't just let populateClone do the work as setValue will throw an IllegalArgumentException
      *
-     * @return
+     * @return a deep copy of this matrix.
      */
     public Object clone() {
         DiagonalMatrixImpl toReturn = new DiagonalMatrixImpl(rows, cols);
@@ -92,7 +97,7 @@ class DiagonalMatrixImpl extends AbstractSquareMatrix {
         return toReturn;
     }
 
-    protected Matrix createClone() {
-        throw new UnsupportedOperationException("Should never be called");
+    protected Matrix createNascentClone() {
+        throw new UnsupportedOperationException("Should never be called as we have already overridden clone.");
     }
 }

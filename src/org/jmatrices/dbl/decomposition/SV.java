@@ -38,12 +38,12 @@ import org.jmatrices.dbl.MatrixFactory;
  * The code is basically JAMA code with modifications made to fit in the scheme of things.
  * </font></p>
  * <p/>
- * Author: purangp
+ * @author ppurang
  * </p>
  * Date: 12.03.2004
  * Time: 23:09:45
  */
-public class SV {
+public final class SV {
     /* ------------------------
 Class variables
 * ------------------------ */
@@ -86,7 +86,7 @@ Class variables
     public SV(Matrix matrix) {
         // Derived from LINPACK code.
         // Initialize.
-        MatrixAdaptor A = new MatrixAdaptor(MatrixFactory.getMatrixClone(matrix));
+        MatrixAdaptor A = new MatrixAdaptor(MatrixFactory.getMutableMatrixClone(matrix));
         m = matrix.rows();          //changed
         n = matrix.cols();          //changed
         int nu = Math.min(m, n);
@@ -644,7 +644,7 @@ Class variables
      */
 
     public Matrix getSingularValues() {
-        return s;
+        return s.getAdaptee();
     }
 
     /**
