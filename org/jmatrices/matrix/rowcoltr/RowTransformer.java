@@ -1,10 +1,10 @@
-package org.jmatrices.matrix.rowcolop;
+package org.jmatrices.matrix.rowcoltr;
 
 import org.jmatrices.matrix.Matrix;
-import org.jmatrices.matrix.transform.MatrixTransformer;
+import org.jmatrices.matrix.transformer.MatrixTransformer;
 
 /**
- * RowOperator  captures the operations that can be carried out on rows of a matrix
+ * RowTransformer  captures the operations that can be carried out on rows of a matrix
  * <p>
  * Given a matrix of dimension mxn <strong> M -yields-> C</strong> ,where C is a column vector of dimension mx1.
  * </p>
@@ -17,7 +17,7 @@ import org.jmatrices.matrix.transform.MatrixTransformer;
  * Date: 07.03.2004
  * Time: 20:37:21
  */
-public class RowOperator {
+public class RowTransformer {
     /**
      * Sums up all the rows and returns them as a column vector
      *
@@ -25,7 +25,7 @@ public class RowOperator {
      * @return c(mx1) column vector with row sums
      */
     public static Matrix sum(Matrix m) {
-        return MatrixTransformer.transpose(ColumnOperator.sum(MatrixTransformer.transpose(m)));
+        return MatrixTransformer.transpose(ColumnTransformer.sum(MatrixTransformer.transpose(m)));
     }
 
     /**
@@ -35,7 +35,7 @@ public class RowOperator {
      * @return c(mx1) column vector with row products
      */
     public static Matrix product(Matrix m) {
-        return MatrixTransformer.transpose(ColumnOperator.product(MatrixTransformer.transpose(m)));
+        return MatrixTransformer.transpose(ColumnTransformer.product(MatrixTransformer.transpose(m)));
     }
 
     /**
@@ -48,7 +48,7 @@ public class RowOperator {
      * @return c(mx1) column vector with row means
      */
     public static Matrix mean(Matrix m, boolean adjustment) {
-        return MatrixTransformer.transpose(ColumnOperator.mean(MatrixTransformer.transpose(m), adjustment));
+        return MatrixTransformer.transpose(ColumnTransformer.mean(MatrixTransformer.transpose(m), adjustment));
     }
 
     /**
@@ -58,7 +58,7 @@ public class RowOperator {
      * @return c(mx1) column vector with row's maximum values
      */
     public static Matrix max(Matrix m) {
-        return MatrixTransformer.transpose(ColumnOperator.max(MatrixTransformer.transpose(m)));
+        return MatrixTransformer.transpose(ColumnTransformer.max(MatrixTransformer.transpose(m)));
     }
 
     /**
@@ -68,11 +68,11 @@ public class RowOperator {
      * @return c(mx1) column vector with rows's minimum values
      */
     public static Matrix min(Matrix m) {
-        return MatrixTransformer.transpose(ColumnOperator.min(MatrixTransformer.transpose(m)));
+        return MatrixTransformer.transpose(ColumnTransformer.min(MatrixTransformer.transpose(m)));
     }
 
 
-    private RowOperator() {
+    private RowTransformer() {
     }
 
 }
@@ -94,4 +94,4 @@ public class RowOperator {
     You should have received a copy of the GNU Lesser General Public
     License along with this library, see License.txt; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */ 
+ */

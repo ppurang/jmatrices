@@ -1,10 +1,10 @@
-package org.jmatrices.matrix.rowcolop;
+package org.jmatrices.matrix.rowcoltr;
 
 import org.jmatrices.matrix.Matrix;
 import org.jmatrices.matrix.MatrixFactory;
 
 /**
- * ColumnOperator captures the operations that can be carried out on columns of a matrix
+ * ColumnTransformer captures the operations that can be carried out on columns of a matrix
  * <p>
  * Given a matrix of dimension mxn <strong> M -yields-> R</strong> ,where R is a row vector of dimension 1xn.
  * </p>
@@ -17,7 +17,7 @@ import org.jmatrices.matrix.MatrixFactory;
  * Date: 07.03.2004
  * Time: 20:46:52
  */
-public class ColumnOperator {
+public class ColumnTransformer {
     /**
      * <p/>
      * <font color="red">this is an open thought of trying to make column operations eleganter and perhaps faster </font>
@@ -27,10 +27,10 @@ public class ColumnOperator {
      * @param m
      * @param co
      * @return
-     * @see ColumnOperation
+     * @see ColumnTransformation
      * @see org.jmatrices.matrix.HeavyMatrixImpl
      */
-    public static Matrix applyColumnOperation(Matrix m, ColumnOperation co) {
+    public static Matrix applyColumnOperation(Matrix m, ColumnTransformation co) {
         throw new UnsupportedOperationException("to be implemented");
     }
 
@@ -173,7 +173,7 @@ public class ColumnOperator {
         return d;
     }
 
-    private ColumnOperator() {
+    private ColumnTransformer() {
     }
 }
 
@@ -195,4 +195,4 @@ public class ColumnOperator {
     You should have received a copy of the GNU Lesser General Public
     License along with this library, see License.txt; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */ 
+ */

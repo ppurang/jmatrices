@@ -1,4 +1,4 @@
-package org.jmatrices.matrix.transform;
+package org.jmatrices.matrix.transformer;
 
 /**
  * MatrixConditionalEBETransformation
@@ -12,7 +12,7 @@ package org.jmatrices.matrix.transform;
  * public static Matrix getScalarMatrix(int dim, final double scalar) {
  *       Matrix m = MatrixFactory.getMatrix(dim, dim);
  *       return MatrixEBETransformer.ebeTransform(m, new MatrixConditionalEBETransformation() {
- *           public double transform(int row, int col, double element) {
+ *           public double transformer(int row, int col, double element) {
  *               if (row == col)
  *                   return scalar;
  *               return
@@ -58,4 +58,4 @@ public interface MatrixConditionalEBETransformation {
     You should have received a copy of the GNU Lesser General Public
     License along with this library, see License.txt; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */ 
+ */

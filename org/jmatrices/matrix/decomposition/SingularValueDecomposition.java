@@ -108,7 +108,7 @@ public class SingularValueDecomposition {
         for (int k = 0; k < Math.max(nct, nrt); k++) {
             if (k < nct) {
 
-                // Compute the transformation for the k-th column and
+                // Compute the transformer for the k-th column and
                 // place the k-th diagonal in s[k].
                 // Compute 2-norm of k-th column without under/overflow.
                 s[k] = 0;
@@ -129,7 +129,7 @@ public class SingularValueDecomposition {
             for (int j = k + 1; j < n; j++) {
                 if ((k < nct) & (s[k] != 0.0)) {
 
-                    // Apply the transformation.
+                    // Apply the transformer.
 
                     double t = 0;
                     for (int i = k; i < m; i++) {
@@ -142,13 +142,13 @@ public class SingularValueDecomposition {
                 }
 
                 // Place the k-th row of A into e for the
-                // subsequent calculation of the row transformation.
+                // subsequent calculation of the row transformer.
 
                 e[j] = A[k][j];
             }
             if (wantu & (k < nct)) {
 
-                // Place the transformation in U for subsequent back
+                // Place the transformer in U for subsequent back
                 // multiplication.
 
                 for (int i = k; i < m; i++) {
@@ -157,7 +157,7 @@ public class SingularValueDecomposition {
             }
             if (k < nrt) {
 
-                // Compute the k-th row transformation and place the
+                // Compute the k-th row transformer and place the
                 // k-th super-diagonal in e[k].
                 // Compute 2-norm without under/overflow.
                 e[k] = 0;
@@ -176,7 +176,7 @@ public class SingularValueDecomposition {
                 e[k] = -e[k];
                 if ((k + 1 < m) & (e[k] != 0.0)) {
 
-                    // Apply the transformation.
+                    // Apply the transformer.
 
                     for (int i = k + 1; i < m; i++) {
                         work[i] = 0.0;
@@ -195,7 +195,7 @@ public class SingularValueDecomposition {
                 }
                 if (wantv) {
 
-                    // Place the transformation in V for subsequent
+                    // Place the transformer in V for subsequent
                     // back multiplication.
 
                     for (int i = k + 1; i < n; i++) {

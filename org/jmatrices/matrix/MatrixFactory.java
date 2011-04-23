@@ -1,8 +1,8 @@
 package org.jmatrices.matrix;
 
-import org.jmatrices.matrix.transform.MatrixConditionalEBETransformation;
-import org.jmatrices.matrix.transform.MatrixEBETransformation;
-import org.jmatrices.matrix.transform.MatrixEBETransformer;
+import org.jmatrices.matrix.transformer.MatrixConditionalEBETransformation;
+import org.jmatrices.matrix.transformer.MatrixEBETransformation;
+import org.jmatrices.matrix.transformer.MatrixEBETransformer;
 
 /**
  * MatrixFactory is one-stop shop for creating matrices.
@@ -98,7 +98,7 @@ public class MatrixFactory {
     }
 
     /**
-     * todo perhaps should be moved to transform package and made public!
+     * todo perhaps should be moved to transformer package and made public!
      *
      * @param m
      * @param s
@@ -131,4 +131,4 @@ public class MatrixFactory {
     You should have received a copy of the GNU Lesser General Public
     License along with this library, see License.txt; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */ 
+ */

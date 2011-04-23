@@ -1,4 +1,4 @@
-package org.jmatrices.matrix.transform;
+package org.jmatrices.matrix.transformer;
 
 /**
  * MatrixEBETransformation
@@ -13,7 +13,7 @@ package org.jmatrices.matrix.transform;
  * <pre>
  * private static Matrix scalarAddition(Matrix m, final double s) {
  *       return MatrixEBETransformer.ebeTransform(m, new MatrixEBETransformation() {
- *           public double transform(double element) {
+ *           public double transformer(double element) {
  *               return element + s; //could be +, *, -, /
  *           }
  *       });
@@ -22,7 +22,7 @@ package org.jmatrices.matrix.transform;
  * <pre>
  * // unary minus or negation
  * new MatrixEBETransformation() {
- *      double transform(double element) {
+ *      double transformer(double element) {
  *          return -element;
  *      }
  * };
@@ -30,7 +30,7 @@ package org.jmatrices.matrix.transform;
  * <pre>
  * //scalar multiplication
  * new MatrixEBETransformation() {
- *      double transform(double element) {
+ *      double transformer(double element) {
  *          return 2 * element;
  *      }
  * };
@@ -38,7 +38,7 @@ package org.jmatrices.matrix.transform;
  * <pre>
  * // function application
  * new MatrixEBETransformation() {
- *      double transform(double element) {
+ *      double transformer(double element) {
  *          return Math.sin(element);
  *      }
  * };
@@ -88,4 +88,4 @@ public interface MatrixEBETransformation {
     You should have received a copy of the GNU Lesser General Public
     License along with this library, see License.txt; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */ 
+ */

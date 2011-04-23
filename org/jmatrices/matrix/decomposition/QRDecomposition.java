@@ -90,7 +90,7 @@ public class QRDecomposition {
                 }
                 QR[k][k] += 1.0;
 
-                // Apply transformation to remaining columns.
+                // Apply transformer to remaining columns.
                 for (int j = k + 1; j < n; j++) {
                     double s = 0.0;
                     for (int i = k; i < m; i++) {

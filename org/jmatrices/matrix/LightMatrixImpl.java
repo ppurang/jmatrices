@@ -84,7 +84,7 @@ public class LightMatrixImpl implements Matrix {
     }
 
 
-    //todo should we return arrays or matrices?  we don't have to return arrays as get returns the rowView array perhaps we should move these to transform package!!!
+    //todo should we return arrays or matrices?  we don't have to return arrays as get returns the rowView array perhaps we should move these to transformer package!!!
     //
     public Matrix getRow(int row) {
         return getRowMatrix(cols, rowView[row]);
@@ -298,4 +298,4 @@ public class LightMatrixImpl implements Matrix {
     You should have received a copy of the GNU Lesser General Public
     License along with this library, see License.txt; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */ 
+ */

@@ -5,11 +5,11 @@ import org.jmatrices.matrix.decomposition.SingularValueDecomposition;
 import org.jmatrices.matrix.measure.MatrixMeasure;
 import org.jmatrices.matrix.measure.MatrixProperty;
 import org.jmatrices.matrix.operator.MatrixOperator;
-import org.jmatrices.matrix.rowcolop.ColumnOperator;
-import org.jmatrices.matrix.rowcolop.RowOperator;
-import org.jmatrices.matrix.transform.MatrixEBETransformation;
-import org.jmatrices.matrix.transform.MatrixEBETransformer;
-import org.jmatrices.matrix.transform.MatrixTransformer;
+import org.jmatrices.matrix.rowcoltr.ColumnTransformer;
+import org.jmatrices.matrix.rowcoltr.RowTransformer;
+import org.jmatrices.matrix.transformer.MatrixEBETransformation;
+import org.jmatrices.matrix.transformer.MatrixEBETransformer;
+import org.jmatrices.matrix.transformer.MatrixTransformer;
 
 /**
  * TestMatrices
@@ -356,14 +356,14 @@ public class TestMatrices {
         a.set(3, 3, 4);
         a.set(3, 4, 5);
         ((LightMatrixImpl) a).toString();
-        ((LightMatrixImpl) ColumnOperator.sum(a)).toString();
-        ((LightMatrixImpl) ColumnOperator.product(a)).toString();
+        ((LightMatrixImpl) ColumnTransformer.sum(a)).toString();
+        ((LightMatrixImpl) ColumnTransformer.product(a)).toString();
 
-        ((LightMatrixImpl) ColumnOperator.max(a)).toString();
-        ((LightMatrixImpl) ColumnOperator.min(a)).toString();
+        ((LightMatrixImpl) ColumnTransformer.max(a)).toString();
+        ((LightMatrixImpl) ColumnTransformer.min(a)).toString();
 
-        ((LightMatrixImpl) ColumnOperator.mean(a, false)).toString();
-        ((LightMatrixImpl) ColumnOperator.mean(a, true)).toString();
+        ((LightMatrixImpl) ColumnTransformer.mean(a, false)).toString();
+        ((LightMatrixImpl) ColumnTransformer.mean(a, true)).toString();
 
     }
 
@@ -380,14 +380,14 @@ public class TestMatrices {
         a.set(3, 3, 4);
         a.set(3, 4, 5);
         ((LightMatrixImpl) a).toString();
-        ((LightMatrixImpl) RowOperator.sum(a)).toString();
-        ((LightMatrixImpl) RowOperator.product(a)).toString();
+        ((LightMatrixImpl) RowTransformer.sum(a)).toString();
+        ((LightMatrixImpl) RowTransformer.product(a)).toString();
 
-        ((LightMatrixImpl) RowOperator.max(a)).toString();
-        ((LightMatrixImpl) RowOperator.min(a)).toString();
+        ((LightMatrixImpl) RowTransformer.max(a)).toString();
+        ((LightMatrixImpl) RowTransformer.min(a)).toString();
 
-        ((LightMatrixImpl) RowOperator.mean(a, false)).toString();
-        ((LightMatrixImpl) RowOperator.mean(a, true)).toString();
+        ((LightMatrixImpl) RowTransformer.mean(a, false)).toString();
+        ((LightMatrixImpl) RowTransformer.mean(a, true)).toString();
 
     }
 
@@ -437,4 +437,4 @@ public class TestMatrices {
     You should have received a copy of the GNU Lesser General Public
     License along with this library, see License.txt; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */ 
+ */

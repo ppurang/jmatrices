@@ -133,7 +133,7 @@ public class EigenvalueDecomposition {
                     e[j] = 0.0;
                 }
 
-                // Apply similarity transformation to remaining columns.
+                // Apply similarity transformer to remaining columns.
 
                 for (int j = 0; j < i; j++) {
                     f = d[j];
@@ -254,7 +254,7 @@ public class EigenvalueDecomposition {
                     }
                     f = f + h;
 
-                    // Implicit QL transformation.
+                    // Implicit QL transformer.
 
                     p = d[m];
                     double c = 1.0;
@@ -276,7 +276,7 @@ public class EigenvalueDecomposition {
                         p = c * d[i] - s * g;
                         d[i + 1] = h + s * (c * g + s * d[i]);
 
-                        // Accumulate transformation.
+                        // Accumulate transformer.
 
                         for (int k = 0; k < n; k++) {
                             h = V[k][i + 1];
@@ -341,7 +341,7 @@ public class EigenvalueDecomposition {
             }
             if (scale != 0.0) {
 
-                // Compute Householder transformation.
+                // Compute Householder transformer.
 
                 double h = 0.0;
                 for (int i = high; i >= m; i--) {
@@ -355,7 +355,7 @@ public class EigenvalueDecomposition {
                 h = h - ort[m] * g;
                 ort[m] = ort[m] - g;
 
-                // Apply Householder similarity transformation
+                // Apply Householder similarity transformer
                 // H = (I-u*u'/h)*H*(I-u*u')/h)
 
                 for (int j = m; j < n; j++) {
@@ -862,7 +862,7 @@ public class EigenvalueDecomposition {
             }
         }
 
-        // Back transformation to get eigenvectors of original matrix
+        // Back transformer to get eigenvectors of original matrix
 
         for (int j = nn - 1; j >= low; j--) {
             for (int i = low; i <= high; i++) {

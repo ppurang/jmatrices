@@ -3,11 +3,11 @@ package org.jmatrices.matrix.measure;
 import org.jmatrices.matrix.Matrix;
 import org.jmatrices.matrix.decomposition.LUDecomposition;
 import org.jmatrices.matrix.decomposition.SingularValueDecomposition;
-import org.jmatrices.matrix.rowcolop.ColumnOperator;
-import org.jmatrices.matrix.rowcolop.RowOperator;
-import org.jmatrices.matrix.transform.MatrixEBETransformation;
-import org.jmatrices.matrix.transform.MatrixEBETransformer;
-import org.jmatrices.matrix.transform.MatrixTransformer;
+import org.jmatrices.matrix.rowcoltr.ColumnTransformer;
+import org.jmatrices.matrix.rowcoltr.RowTransformer;
+import org.jmatrices.matrix.transformer.MatrixEBETransformation;
+import org.jmatrices.matrix.transformer.MatrixEBETransformer;
+import org.jmatrices.matrix.transformer.MatrixTransformer;
 
 /**
  * MatrixMeasure provides important measures associated with a matrix
@@ -43,7 +43,7 @@ public class MatrixMeasure {
      * @return trace
      */
     public static double getTrace(Matrix m) {
-        return ColumnOperator.sum(MatrixTransformer.diagonal(m)).get(1, 1);
+        return ColumnTransformer.sum(MatrixTransformer.diagonal(m)).get(1, 1);
     }
 
     /**
@@ -65,7 +65,7 @@ public class MatrixMeasure {
      * @return maximum value
      */
     public static double getMax(Matrix m) {
-        return (RowOperator.max(ColumnOperator.max(m))).get(1, 1);
+        return (RowTransformer.max(ColumnTransformer.max(m))).get(1, 1);
     }
 
     /**
@@ -75,7 +75,7 @@ public class MatrixMeasure {
      * @return minimum value
      */
     public static double getMin(Matrix m) {
-        return (RowOperator.min(ColumnOperator.min(m))).get(1, 1);
+        return (RowTransformer.min(ColumnTransformer.min(m))).get(1, 1);
     }
 
     /**
@@ -85,7 +85,7 @@ public class MatrixMeasure {
      * @return sum of all values
      */
     public static double getSum(Matrix m) {
-        return (RowOperator.sum(ColumnOperator.sum(m))).get(1, 1);
+        return (RowTransformer.sum(ColumnTransformer.sum(m))).get(1, 1);
     }
 
     /**
@@ -95,7 +95,7 @@ public class MatrixMeasure {
      * @return product of all values
      */
     public static double getProduct(Matrix m) {
-        return (RowOperator.product(ColumnOperator.product(m))).get(1, 1);
+        return (RowTransformer.product(ColumnTransformer.product(m))).get(1, 1);
     }
 
     /**
@@ -112,7 +112,7 @@ public class MatrixMeasure {
         if (adjustment)
             return ((prod / (prod - 1)) * getMean(m, false));
         else
-            return RowOperator.mean(ColumnOperator.mean(m, false), false).get(1, 1);
+            return RowTransformer.mean(ColumnTransformer.mean(m, false), false).get(1, 1);
     }
 
 
@@ -123,7 +123,7 @@ public class MatrixMeasure {
      * @return maximum column sum
      */
     double getNorm1(Matrix m) {
-        return RowOperator.max(ColumnOperator.sum(m)).get(1, 1);
+        return RowTransformer.max(ColumnTransformer.sum(m)).get(1, 1);
     }
 
     /**
@@ -144,7 +144,7 @@ public class MatrixMeasure {
      * @return maximum row sum
      */
     double getNormInfinity(Matrix m) {
-        return ColumnOperator.max(RowOperator.sum(m)).get(1, 1);
+        return ColumnTransformer.max(RowTransformer.sum(m)).get(1, 1);
     }
 
     /**
@@ -196,4 +196,4 @@ public class MatrixMeasure {
     You should have received a copy of the GNU Lesser General Public
     License along with this library, see License.txt; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */ 
+ */

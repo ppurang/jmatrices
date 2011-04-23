@@ -2,7 +2,7 @@ package org.jmatrices.matrix.decomposition;
 
 /**
  * MatrixPartition
- * 
+ *
  * <br/>
  * Author: purangp
  * <br/>

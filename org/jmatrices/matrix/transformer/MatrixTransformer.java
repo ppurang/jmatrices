@@ -1,4 +1,4 @@
-package org.jmatrices.matrix.transform;
+package org.jmatrices.matrix.transformer;
 
 import org.jmatrices.matrix.Matrix;
 import org.jmatrices.matrix.MatrixFactory;
@@ -6,7 +6,7 @@ import org.jmatrices.matrix.measure.MatrixProperty;
 import org.jmatrices.matrix.operator.MatrixOperator;
 
 /**
- * MatrixTransformer is responsible for classical non element-by-element transformation of a matrix
+ * MatrixTransformer is responsible for classical non element-by-element transformer of a matrix
  * <p>
  * Captures classical transformations that aren't applicable in an element-by-element way (only exception is {@link #negate(org.jmatrices.matrix.Matrix)} )
  * </p>
@@ -199,4 +199,4 @@ public class MatrixTransformer {
     You should have received a copy of the GNU Lesser General Public
     License along with this library, see License.txt; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */ 
+ */

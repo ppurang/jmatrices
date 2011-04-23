@@ -33,7 +33,11 @@ package org.jmatrices.matrix.operator;
 public interface MatrixEBEOperation {
     /**
      * Applies the operation to the elements
-     *
+     * <p>
+     * <font color="blue">
+     * todo - perhaps we should provide row, col for better control!  
+     * </font>
+     * </p>
      * @param a element of a matrix
      * @param b element of a matrix
      * @return result of application of an operation
@@ -59,4 +63,4 @@ public interface MatrixEBEOperation {
     You should have received a copy of the GNU Lesser General Public
     License along with this library, see License.txt; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */ 
+ */

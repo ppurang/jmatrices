@@ -1,4 +1,4 @@
-package org.jmatrices.matrix.transform;
+package org.jmatrices.matrix.transformer;
 
 import org.jmatrices.matrix.Matrix;
 import org.jmatrices.matrix.MatrixFactory;
@@ -19,7 +19,7 @@ public class MatrixEBETransformer {
      * Performs a ebeTransform on a matrix
      *
      * @param m     Matrix
-     * @param mebet MatrixEBETransformation object responsible for the transformation
+     * @param mebet MatrixEBETransformation object responsible for the transformer
      * @return transformed matrix
      */
     public static Matrix ebeTransform(Matrix m, MatrixEBETransformation mebet) {
@@ -37,7 +37,7 @@ public class MatrixEBETransformer {
      * Performs a ebeTransform on a matrix
      *
      * @param m      Matrix to be transformed
-     * @param mcebet MatrixConditionalEBETransformation object responsible for the transformation
+     * @param mcebet MatrixConditionalEBETransformation object responsible for the transformer
      * @return transformed matrix
      */
     public static Matrix ebeTransform(Matrix m, MatrixConditionalEBETransformation mcebet) {

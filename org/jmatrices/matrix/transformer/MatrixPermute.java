@@ -1,4 +1,4 @@
-package org.jmatrices.matrix.transform;
+package org.jmatrices.matrix.transformer;
 
 import org.jmatrices.matrix.Matrix;
 
@@ -46,4 +46,4 @@ public class MatrixPermute {
     You should have received a copy of the GNU Lesser General Public
     License along with this library, see License.txt; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */ 
+ */

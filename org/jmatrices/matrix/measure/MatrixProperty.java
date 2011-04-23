@@ -4,7 +4,7 @@ import org.jmatrices.matrix.Matrix;
 import org.jmatrices.matrix.MatrixFactory;
 import org.jmatrices.matrix.decomposition.CholeskyDecomposition;
 import org.jmatrices.matrix.decomposition.LUDecomposition;
-import org.jmatrices.matrix.transform.MatrixTransformer;
+import org.jmatrices.matrix.transformer.MatrixTransformer;
 
 /**
  * MatrixProperty
@@ -257,4 +257,4 @@ public class MatrixProperty {
     You should have received a copy of the GNU Lesser General Public
     License along with this library, see License.txt; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */ 
+ */

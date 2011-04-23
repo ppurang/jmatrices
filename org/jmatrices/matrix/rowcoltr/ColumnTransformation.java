@@ -1,9 +1,9 @@
-package org.jmatrices.matrix.rowcolop;
+package org.jmatrices.matrix.rowcoltr;
 
 import org.jmatrices.matrix.Matrix;
 
 /**
- * ColumnOperation
+ * ColumnTransformation
  * <p>
  * <font color="red">this is an open thought of trying to make column operations eleganter and perhaps faster </font>
  * Check out the "see also" section
@@ -14,10 +14,10 @@ import org.jmatrices.matrix.Matrix;
  * Date: 07.03.2004
  * Time: 20:48:58
  *
- * @see ColumnOperator#applyColumnOperation(org.jmatrices.matrix.Matrix, org.jmatrices.matrix.rowcolop.ColumnOperation)
+ * @see ColumnTransformer#applyColumnOperation(org.jmatrices.matrix.Matrix, org.jmatrices.matrix.rowcoltr.ColumnTransformation)
  * @see org.jmatrices.matrix.HeavyMatrixImpl
  */
-public interface ColumnOperation {
+public interface ColumnTransformation {
     public double apply(Matrix d);
 }
 
@@ -39,4 +39,4 @@ public interface ColumnOperation {
     You should have received a copy of the GNU Lesser General Public
     License along with this library, see License.txt; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */ 
+ */
